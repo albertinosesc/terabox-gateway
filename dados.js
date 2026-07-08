@@ -23,8 +23,8 @@ const dadosLivros = [
     "autor": "aaaaa",
     "titulo": "aaaaa",
     "arquivo": "pdf/999.pdf"
-  }, // <-- Atenção à vírgula fechando o bloco com }
-  {  // <-- Faltava abrir esta chave
+  },
+  {
     "numero": "998",
     "tipo": "PDF",
     "instrumento": "1",
@@ -32,7 +32,7 @@ const dadosLivros = [
     "titulo": "1",
     "arquivo": "pdf/998.pdf"
   },
-  {  // <-- Faltava abrir esta chave
+  {
     "numero": "997",
     "tipo": "PDF",
     "instrumento": "997",
@@ -40,7 +40,7 @@ const dadosLivros = [
     "titulo": "997",
     "arquivo": "pdf/997.pdf"
   },
-  {  // <-- Faltava abrir esta chave
+  {
     "numero": "996",
     "tipo": "PDF",
     "instrumento": "996",
@@ -48,15 +48,14 @@ const dadosLivros = [
     "titulo": "996",
     "arquivo": "pdf/996.pdf"
   },
-
   {
     "numero": "123",
     "tipo": "PDF",
     "instrumento": "FLAUTA",
     "autor": "Pixinguinha",
     "titulo": "Estudos de Flauta",
-    "arquivo": "testeA/123.pdf",
-    "conta": "CONTA_A" // O site vai abrir e buscar este arquivo na pasta do testeA!
+    "arquivo": "pdf/123.pdf", // Ajustado para seguir o padrão do app.js
+    "conta": "CONTA_A"
   },
   {
     "numero": "321",
@@ -64,32 +63,7 @@ const dadosLivros = [
     "instrumento": "VIOLÃO",
     "autor": "Dilermando Reis",
     "titulo": "Abismo de Rosas",
-    "arquivo": "testeB/321.pdf",
-    "conta": "CONTA_B" // O site vai abrir e buscar este arquivo na pasta do testeB!
+    "arquivo": "pdf/321.pdf", // Ajustado para seguir o padrão do app.js
+    "conta": "CONTA_B"
   }
-];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-];
+]; // Fechado corretamente apenas uma vez
