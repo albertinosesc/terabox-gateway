@@ -1,3 +1,4 @@
+// ===== URL da sua API Vercel (terabox-gateway) =====
 const API_TERABOX = "https://terabox-gateway-dusky.vercel.app/api";
 
 // ===== URL da pasta no TeraBox =====
@@ -59,9 +60,7 @@ async function abrirPDF(caminho) {
     }
 }
 
-
-
-// ===== Carregar dados (agora a partir da variável global) =====
+// ===== Carregar dados =====
 function carregarDados() {
     if (typeof dadosLivros !== 'undefined') {
         livros = dadosLivros;
@@ -113,7 +112,7 @@ function renderizarTabela() {
     container.innerHTML = `
         <h1>📖 Biblioteca</h1>
         <div class="search-bar">
-            <input type="text" id="pesquisa" placeholder="Buscar por número, autor, instrumento, tipo ou título..." oninput="filtrarEBuscar()">
+            <input type="text" id="pesquisa" placeholder="Buscar..." oninput="filtrarEBuscar()">
             <select id="filtroTipo" onchange="filtrarEBuscar()">
                 <option value="todos">Todos</option>
                 <option value="PDF">PDF</option>
