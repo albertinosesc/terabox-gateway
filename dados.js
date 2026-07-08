@@ -86,5 +86,28 @@ const dadosLivros = [
     "titulo": "Abismo de Rosas",
     "arquivo": "pdf/321.pdf", // Ajustado para seguir o padrão do app.js
     "conta": "CONTA_B"
-  }
+  },
+  {"numero":"3736","tipo":"PDF","instrumento":"CONTRABAIXO","autor":"Albertino Moura","titulo":"05_Aula_121","arquivo":"pdf/3736.pdf"},
+  {"numero":"3737","tipo":"PDF","instrumento":"CONTRABAIXO","autor":"Albertino Moura","titulo":"03_Aula_121","arquivo":"pdf/3737.pdf"},
+  {"numero":"3738","tipo":"PDF","instrumento":"CLARINETE","autor":"Paul C. Herfurth","titulo":"A Tune a Day for Clarinet","arquivo":"pdf/3738.pdf"},
+  {"numero":"3739","tipo":"PDF","instrumento":"CLARINETE","autor":"Paul C. Herfurth","titulo":"A Tune a Day for Clarinet","arquivo":"pdf/3739.pdf"},
+  {"numero":"3740","tipo":"PDF","instrumento":"PIANO","autor":"Stephan Beneking","titulo":"18 Preludes for one hand alone","arquivo":"pdf/3740.pdf"},
+  {"numero":"3741","tipo":"PDF","instrumento":"PIANO","autor":"Stephan Beneking","titulo":"12 Valses melancoliques III","arquivo":"pdf/3741.pdf"}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 ]; // Fechado corretamente apenas uma vez
