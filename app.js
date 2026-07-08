@@ -1,4 +1,4 @@
-// app.js - Versão Otimizada com Busca Direta no TeraBox
+// app.js - Versão Otimizada com Busca Direta no OneDrive (Sesc Bahia)
 
 let livros = [];
 let resultadosFiltrados = [];
@@ -7,12 +7,12 @@ let autorSelecionado = null;
 let instrumentoSelecionado = null;
 
 // ============================================================
-// CONFIGURAÇÃO DO TERABOX
+// CONFIGURAÇÃO DO ONEDRIVE
 // ============================================================
-// Link de compartilhamento da sua pasta pública no TeraBox
-const LINK_PASTA_TERABOX = "https://1024terabox.com/s/1AwSdq7HXjGoAyCosfFiebw"; 
+// Link base da sua pasta de PDFs no OneDrive institucional
+const LINK_PASTA_ONEDRIVE = "https://sescba-my.sharepoint.com/personal/ba7918_sescbahia_com_br/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fba7918%5Fsescbahia%5Fcom%5Fbr%2FDocuments%2FNBM%2Fpdf&ga=1";
 
-// ===== Abrir PDF com busca automatizada dentro do TeraBox =====
+// ===== Abrir PDF com busca automatizada dentro do OneDrive =====
 function abrirPDF(caminho) {
     // Se o caminho já for um link completo (http/https), abre direto
     if (caminho.startsWith('http://') || caminho.startsWith('https://')) {
@@ -20,16 +20,17 @@ function abrirPDF(caminho) {
         return;
     }
 
-    // 1. Extrai o nome do arquivo (ex: "pdf/6945.pdf" vira "6945.pdf")
-    const nomeArquivo = caminho.replace('pdf/', '');
+    // 1. Extrai o nome puro do arquivo (ex: "pdf/6945.pdf" vira "6945")
+    const nomeArquivo = caminho.replace('pdf/', '').replace('.pdf', '');
 
-    // 2. Remove a extensão ".pdf" para que a busca por palavra-chave seja mais precisa
-    const termoBusca = nomeArquivo.replace('.pdf', '');
+    // 2. Codifica o termo para evitar problemas com caracteres especiais ou espaços
+    const termoBusca = encodeURIComponent(nomeArquivo);
 
-    // 3. Monta a URL injetando o termo no parâmetro de busca do TeraBox (?keyWord=)
-    const urlBuscaTeraBox = `${LINK_PASTA_TERABOX}?keyWord=${encodeURIComponent(termoBusca)}`;
+    // 3. Monta a URL injetando o filtro de busca nativo do SharePoint/OneDrive
+    // O OneDrive corporativo aceita a inclusão do parâmetro q ou d para filtragem interna
+    const urlBuscaOneDrive = `${LINK_PASTA_ONEDRIVE}&q=${termoBusca}`;
     
-    window.open(urlBuscaTeraBox, '_blank');
+    window.open(urlBuscaOneDrive, '_blank');
 }
 
 // ===== Carregar dados (a partir da variável global dados.js) =====
@@ -171,7 +172,7 @@ function renderizarLinhas(lista) {
             <td>${livro.instrumento}</td>
             <td>${livro.autor}</td>
             <td>${livro.titulo}</td>
-            <td><button class="btn-pdf" onclick="abrirPDF('${livro.arquivo}')">📄 Abrir no TeraBox</button></td>
+            <td><button class="btn-pdf" onclick="abrirPDF('${livro.arquivo}')">📄 Abrir no OneDrive</button></td>
         </tr>`;
     });
     tbody.innerHTML = html;
