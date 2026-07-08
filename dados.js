@@ -17,13 +17,36 @@ const dadosLivros = [
     "arquivo": "pdf/6955.pdf"
   },
     {
-    "numero": "45",
+    "numero": "999",
     "tipo": "PDF",
-    "instrumento": "CASA",
-    "autor": "DSDSD",
-    "titulo": "dsasaaa",
-    "arquivo": "pdf/45.pdf"
-  }
+    "instrumento": "asasasa",
+    "autor": "aaaaa",
+    "titulo": "aaaaa",
+    "arquivo": "pdf/999.pdf"
+  },
+
+      "numero": "998",
+    "tipo": "PDF",
+    "instrumento": "1",
+    "autor": "1",
+    "titulo": "1",
+    "arquivo": "pdf/998.pdf"
+  },
+
+          "numero": "997",
+    "tipo": "PDF",
+    "instrumento": "997",
+    "autor": "997",
+    "titulo": "997",
+    "arquivo": "pdf/997.pdf"
+  },
+          "numero": "996",
+    "tipo": "PDF",
+    "instrumento": "996",
+    "autor": "996",
+    "titulo": "996",
+    "arquivo": "pdf/996.pdf"
+  },
   
 
 ];
