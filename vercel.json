@@ -9,8 +9,7 @@
       "source": "/(.*)",
       "destination": "/api.js"
     }
-  ]
-}
+  ],
   "headers": [
     {
       "source": "/(.*)",
