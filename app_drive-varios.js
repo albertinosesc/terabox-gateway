@@ -1,4 +1,4 @@
-// app.js - Versão Otimizada com Múltiplas Contas do Google Drive
+// app_drive-varios.js - Versão Otimizada com Múltiplas Contas do Google Drive e Exibição de Contas
 
 let livros = [];
 let resultadosFiltrados = [];
@@ -18,7 +18,6 @@ const PASTAS_GOOGLE_DRIVE = {
     "CONTA_B": "18EX9AL0kY5BQfagTk24kcetpmYkOx8FF"
 };
 
-// ===== Abrir PDF direcionando para a conta correta do Drive =====
 // ===== Abrir PDF direcionando para a conta correta do Drive =====
 function abrirPDF(caminho, contaSolicitada) {
     if (caminho.startsWith('http://') || caminho.startsWith('https://')) {
@@ -110,7 +109,7 @@ function renderizarTabela() {
         <div class="table-container">
             <table>
                 <thead>
-                    <tr><th>Número</th><th>Tipo</th><th>Instrumento</th><th>Autor</th><th>Título</th><th>Ação</th></tr>
+                    <tr><th>Número</th><th>Tipo</th><th>Instrumento</th><th>Autor</th><th>Título</th><th>Conta</th><th>Ação</th></tr>
                 </thead>
                 <tbody id="corpoTabela"></tbody>
             </table>
@@ -164,18 +163,21 @@ function renderizarLinhas(lista) {
     const tbody = document.getElementById('corpoTabela');
     if (!tbody) return;
     if (lista.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:30px;">Nenhum livro encontrado.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:30px;">Nenhum livro encontrado.</td></tr>';
         return;
     }
     let html = '';
     lista.forEach(livro => {
-        // Passa o caminho do arquivo e a identificação da conta mapeada
+        // Formata o nome da conta de forma limpa para exibição (ex: "CONTA_A" -> "A")
+        const contaExibicao = livro.conta ? livro.conta.replace('CONTA_', '') : 'PADRAO';
+
         html += `<tr>
             <td>${livro.numero}</td>
             <td>${livro.tipo}</td>
             <td>${livro.instrumento}</td>
             <td>${livro.autor}</td>
             <td>${livro.titulo}</td>
+            <td style="font-family: monospace; font-weight: bold; color: #2b6cb0;">${contaExibicao}</td>
             <td><button class="btn-pdf" onclick="abrirPDF('${livro.arquivo}', '${livro.conta || 'PADRAO'}')">📄 Abrir PDF</button></td>
         </tr>`;
     });
@@ -227,9 +229,10 @@ function filtrarPorAutor(autor) {
         div.innerHTML = '<p>Nenhum livro encontrado.</p>';
         return;
     }
-    let html = `<h3>Livros de ${autor} (${filtrados.length})</h3><div class="table-container"><table><thead><tr><th>Número</th><th>Tipo</th><th>Instrumento</th><th>Título</th><th>Ação</th></tr></thead><tbody>`;
+    let html = `<h3>Livros de ${autor} (${filtrados.length})</h3><div class="table-container"><table><thead><tr><th>Número</th><th>Tipo</th><th>Instrumento</th><th>Título</th><th>Conta</th><th>Ação</th></tr></thead><tbody>`;
     filtrados.forEach(l => {
-        html += `<tr><td>${l.numero}</td><td>${l.tipo}</td><td>${l.instrumento}</td><td>${l.titulo}</td><td><button class="btn-pdf" onclick="abrirPDF('${l.arquivo}', '${l.conta || 'PADRAO'}')">📄 Abrir</button></td></tr>`;
+        const contaExibicao = l.conta ? l.conta.replace('CONTA_', '') : 'PADRAO';
+        html += `<tr><td>${l.numero}</td><td>${l.tipo}</td><td>${l.instrumento}</td><td>${l.titulo}</td><td style="font-family: monospace; font-weight: bold; color: #2b6cb0;">${contaExibicao}</td><td><button class="btn-pdf" onclick="abrirPDF('${l.arquivo}', '${l.conta || 'PADRAO'}')">📄 Abrir</button></td></tr>`;
     });
     html += '</tbody></table></div>';
     div.innerHTML = html;
@@ -258,9 +261,10 @@ function filtrarPorInstrumento(instrumento) {
         div.innerHTML = '<p>Nenhum livro encontrado.</p>';
         return;
     }
-    let html = `<h3>Livros de ${instrumento} (${filtrados.length})</h3><div class="table-container"><table><thead><tr><th>Número</th><th>Tipo</th><th>Autor</th><th>Título</th><th>Ação</th></tr></thead><tbody>`;
+    let html = `<h3>Livros de ${instrumento} (${filtrados.length})</h3><div class="table-container"><table><thead><tr><th>Número</th><th>Tipo</th><th>Autor</th><th>Título</th><th>Conta</th><th>Ação</th></tr></thead><tbody>`;
     filtrados.forEach(l => {
-        html += `<tr><td>${l.numero}</td><td>${l.tipo}</td><td>${l.autor}</td><td>${l.titulo}</td><td><button class="btn-pdf" onclick="abrirPDF('${l.arquivo}', '${l.conta || 'PADRAO'}')">📄 Abrir</button></td></tr>`;
+        const contaExibicao = l.conta ? l.conta.replace('CONTA_', '') : 'PADRAO';
+        html += `<tr><td>${l.numero}</td><td>${l.tipo}</td><td>${l.autor}</td><td>${l.titulo}</td><td style="font-family: monospace; font-weight: bold; color: #2b6cb0;">${contaExibicao}</td><td><button class="btn-pdf" onclick="abrirPDF('${l.arquivo}', '${l.conta || 'PADRAO'}')">📄 Abrir</button></td></tr>`;
     });
     html += '</tbody></table></div>';
     div.innerHTML = html;
