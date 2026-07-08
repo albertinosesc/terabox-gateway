@@ -1,11 +1,9 @@
-//api.js
-
-// ============================================================
-// API para extrair links do TeraBox (Node.js)
-// ============================================================
+// api.js
+const https = require('https');
+const http = require('http');
 
 module.exports = async (req, res) => {
-    // CORS
+    // Cabeçalhos CORS limpos e unificados
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -23,13 +21,23 @@ module.exports = async (req, res) => {
     }
 
     try {
-        const https = require('https');
-        const http = require('http');
-
-        const fetchPage = (url) => {
+        const fetchPage = (targetUrl) => {
             return new Promise((resolve, reject) => {
-                const client = url.startsWith('https') ? https : http;
-                client.get(url, (response) => {
+                const client = targetUrl.startsWith('https') ? https : http;
+                
+                // Configuração para simular um navegador real e evitar bloqueios de segurança
+                const options = {
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                    }
+                };
+
+                client.get(targetUrl, options, (response) => {
+                    // Trata redirecionamentos automáticos do TeraBox
+                    if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
+                        return resolve(fetchPage(response.headers.location));
+                    }
+
                     let data = '';
                     response.on('data', chunk => data += chunk);
                     response.on('end', () => resolve(data));
@@ -59,7 +67,7 @@ module.exports = async (req, res) => {
             const linkLimpo = linkEncontrado.replace(/\\/g, '');
             const nomeArquivo = linkLimpo.split('/').pop() || 'arquivo.pdf';
 
-            return res.json({
+            return res.status(200).json({
                 success: true,
                 files: [{
                     file_name: nomeArquivo,
@@ -70,9 +78,9 @@ module.exports = async (req, res) => {
                 message: 'Arquivo encontrado com sucesso.'
             });
         } else {
-            return res.status(404).json({
+            return res.status(200).json({
                 success: false,
-                error: 'Link não encontrado. Verifique se o link é público.'
+                error: 'Link não encontrado no HTML. Verifique se o link da pasta é público.'
             });
         }
 
@@ -80,7 +88,7 @@ module.exports = async (req, res) => {
         console.error('Erro:', error);
         return res.status(500).json({
             success: false,
-            error: `Erro: ${error.message}`
+            error: `Erro interno no servidor: ${error.message}`
         });
     }
 };
