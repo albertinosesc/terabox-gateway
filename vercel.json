@@ -1,15 +1,16 @@
 {
   "functions": {
-    "api.py": {
-      "runtime": "python@3.9"
+    "api.js": {
+      "runtime": "nodejs18.x"
     }
   },
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/api.py"
+      "destination": "/api.js"
     }
-  ],
+  ]
+}
   "headers": [
     {
       "source": "/(.*)",
