@@ -1,10 +1,70 @@
-// app.js - versão sem fetch (usa dados embutidos)
+// ===== URL da sua API Vercel (terabox-gateway) =====
+const API_TERABOX = "https://terabox-gateway-d0zp5k43m-albertinos-projects.vercel.app/api";
+
+// ===== URL da pasta no TeraBox =====
+const PASTA_TERABOX = "https://1024terabox.com/s/1M3K-9DetfJW-u2tEYsRlNw";
+
+// ===== Cache para armazenar os arquivos da pasta =====
+let cacheArquivosTeraBox = null;
 
 let livros = [];
 let resultadosFiltrados = [];
 let ordenacao = { campo: 'numero', direcao: 'asc' };
 let autorSelecionado = null;
 let instrumentoSelecionado = null;
+
+// ===== Função para listar arquivos da pasta TeraBox =====
+async function listarArquivosTeraBox() {
+    // Se já tiver em cache, retorna
+    if (cacheArquivosTeraBox) {
+        return cacheArquivosTeraBox;
+    }
+
+    const apiUrl = `${API_TERABOX}?url=${encodeURIComponent(PASTA_TERABOX)}`;
+    
+    try {
+        const resposta = await fetch(apiUrl);
+        const dados = await resposta.json();
+        
+        if (dados.success && dados.files && dados.files.length > 0) {
+            // Mapeia os arquivos para um formato mais fácil de usar
+            cacheArquivosTeraBox = dados.files.map(arquivo => ({
+                nome: arquivo.file_name,
+                link: arquivo.streaming_url || arquivo.download_url,
+                tamanho: arquivo.size
+            }));
+            console.log(`✅ ${cacheArquivosTeraBox.length} arquivos encontrados na pasta.`);
+            return cacheArquivosTeraBox;
+        } else {
+            console.error("❌ Erro ao listar arquivos:", dados.error || "Resposta inválida");
+            return [];
+        }
+    } catch (erro) {
+        console.error("❌ Erro na requisição:", erro);
+        return [];
+    }
+}
+
+// ===== Função para abrir PDF (com suporte a TeraBox) =====
+async function abrirPDF(caminho) {
+    // Se já for uma URL completa (não TeraBox)
+    if (caminho.startsWith('http://') || caminho.startsWith('https://')) {
+        window.open(caminho, '_blank');
+        return;
+    }
+
+    // Busca a lista de arquivos da pasta TeraBox
+    const arquivos = await listarArquivosTeraBox();
+    
+    // Procura o arquivo pelo nome
+    const arquivo = arquivos.find(a => a.nome === caminho);
+    
+    if (arquivo) {
+        window.open(arquivo.link, '_blank');
+    } else {
+        alert(`❌ Arquivo "${caminho}" não encontrado na pasta TeraBox.`);
+    }
+}
 
 // ===== Carregar dados (agora a partir da variável global) =====
 function carregarDados() {
@@ -151,13 +211,6 @@ function renderizarLinhas(lista) {
     tbody.innerHTML = html;
 }
 
-// ===== Abrir PDF com PDF.js (visualização no modal) =====
-// ===== Abrir PDF diretamente no navegador (sem PDF.js) =====
-function abrirPDF(caminho) {
-    // Abre o PDF em uma nova aba
-    window.open(caminho, '_blank');
-}
-
 function alterarOrdenacao() {
     filtrarEBuscar();
 }
@@ -281,14 +334,13 @@ function renderizarEstatisticas() {
 // ===== Inicialização =====
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.sidebar a').forEach(link => {
-    link.addEventListener('click', (e) => {
-        const pagina = link.dataset.pagina;
-        if (pagina) {
-            e.preventDefault();   // só bloqueia se tiver data-pagina
-            mostrarPagina(pagina);
-        }
-        // se não tiver data-pagina, o link funciona normalmente
+        link.addEventListener('click', (e) => {
+            const pagina = link.dataset.pagina;
+            if (pagina) {
+                e.preventDefault();
+                mostrarPagina(pagina);
+            }
+        });
     });
-});
-    carregarDados();  // <-- CORRIGIDO: sem .then()
+    carregarDados();
 });
