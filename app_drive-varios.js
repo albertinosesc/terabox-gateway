@@ -19,20 +19,18 @@ const PASTAS_GOOGLE_DRIVE = {
 };
 
 // ===== Abrir PDF direcionando para a conta correta do Drive =====
+// ===== Abrir PDF direcionando para a conta correta do Drive =====
 function abrirPDF(caminho, contaSolicitada) {
-    // Se o caminho já for um link completo (http/https), abre direto
     if (caminho.startsWith('http://') || caminho.startsWith('https://')) {
         window.open(caminho, '_blank');
         return;
     }
 
-    // Extrai o nome puro do arquivo (ex: "pdf/6945.pdf" vira "6945.pdf")
     const nomeArquivo = caminho.replace('pdf/', '');
 
-    // Identifica qual ID de pasta usar (se a conta informada existir, usa ela. Senão, vai para a PADRAO)
     const idContaDestino = PASTAS_GOOGLE_DRIVE[contaSolicitada] || PASTAS_GOOGLE_DRIVE["PADRAO"];
 
-    // Monta a URL de busca direcionando o aluno para a pasta e conta corretas
+    // ESTA LINHA ABAIXO PRECISA SER EXATAMENTE ASSIM (GOOGLE DRIVE):
     const urlBuscaDrive = `https://drive.google.com/drive/folders/${idContaDestino}?q=${encodeURIComponent(nomeArquivo)}`;
     
     window.open(urlBuscaDrive, '_blank');
