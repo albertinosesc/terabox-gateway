@@ -16,31 +16,38 @@ let autorSelecionado = null;
 let instrumentoSelecionado = null;
 
 // ===== Função para listar arquivos da pasta TeraBox =====
+// ===== Função para listar arquivos da pasta TeraBox (Atualizada com API Pública) =====
 async function listarArquivosTeraBox() {
     if (cacheArquivosTeraBox) {
         return cacheArquivosTeraBox;
     }
 
-    const apiUrl = `${API_TERABOX}?url=${encodeURIComponent(PASTA_TERABOX)}`;
+    // Usando uma API pública estável que converte a pasta do TeraBox em JSON de arquivos
+    const urlPastaOriginal = "https://1024terabox.com/s/1M3K-9DetfJW-u2tEYsRlNw";
+    const apiUrl = `https://terabox-dl.qtcloud.workers.dev/api/get-info?shareurl=${encodeURIComponent(urlPastaOriginal)}`;
     
     try {
+        console.log("🔄 Buscando arquivos no TeraBox...");
         const resposta = await fetch(apiUrl);
         const dados = await resposta.json();
         
-        if (dados.success && dados.files && dados.files.length > 0) {
-            cacheArquivosTeraBox = dados.files.map(arquivo => ({
-                nome: arquivo.file_name,
-                link: arquivo.streaming_url || arquivo.download_url,
-                tamanho: arquivo.size
+        // Esta API pública retorna os arquivos dentro de uma array chamada "list"
+        if (dados && dados.list && dados.list.length > 0) {
+            cacheArquivosTeraBox = dados.list.map(arquivo => ({
+                nome: arquivo.filename || arquivo.server_filename,
+                // Fornece o link direto de download gerado pela API deles
+                link: arquivo.download_link || arquivo.dlink,
+                tamanho: arquivo.size || "Desconhecido"
             }));
-            console.log(`✅ ${cacheArquivosTeraBox.length} arquivos encontrados na pasta.`);
+            
+            console.log(`✅ ${cacheArquivosTeraBox.length} arquivos encontrados na pasta do TeraBox.`);
             return cacheArquivosTeraBox;
         } else {
-            console.error("❌ Erro ao listar arquivos:", dados.error || "Resposta inválida");
+            console.error("❌ O extrator não encontrou arquivos ou o link expirou.");
             return [];
         }
     } catch (erro) {
-        console.error("❌ Erro na requisição:", erro);
+        console.error("❌ Erro na requisição do extrator:", erro);
         return [];
     }
 }
