@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Musical</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>🎵 Biblioteca</h2>
+        <a href="#" data-pagina="inicio" class="active">🏠 Início</a>
+        <a href="#" data-pagina="biblioteca">📖 Biblioteca</a>
+        <a href="#" data-pagina="autores">✍️ Autores</a>
+        <a href="#" data-pagina="instrumentos">🎸 Instrumentos</a>
+        <a href="#" data-pagina="estatisticas">📊 Estatísticas</a>
+        <a href="admin.html">⚙️ Admin</a>
+    </div>
+
+    <div class="main">
+        <div id="inicio" class="pagina" style="display:block;"></div>
+        <div id="biblioteca" class="pagina" style="display:none;"></div>
+        <div id="autores" class="pagina" style="display:none;"></div>
+        <div id="instrumentos" class="pagina" style="display:none;"></div>
+        <div id="estatisticas" class="pagina" style="display:none;"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="dados.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>>
