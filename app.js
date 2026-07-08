@@ -1,4 +1,3 @@
-// ===== URL da sua API Vercel (terabox-gateway) =====
 const API_TERABOX = "https://terabox-gateway-dusky.vercel.app/api";
 
 // ===== URL da pasta no TeraBox =====
