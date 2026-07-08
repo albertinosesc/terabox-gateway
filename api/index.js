@@ -1,7 +1,7 @@
 const https = require('https');
 
 module.exports = async (req, res) => {
-    // Cabeçalhos CORS
+    // Cabeçalhos CORS obrigatorios para o seu app.js
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -16,89 +16,67 @@ module.exports = async (req, res) => {
     }
 
     try {
-        // Normaliza a URL de compartilhamento padrão para garantir que caia no visualizador web
-        let targetUrl = urlParam;
-        if (!targetUrl.startsWith('http')) {
-            targetUrl = `https://1024terabox.com/s/${targetUrl}`;
-        }
+        // Usando um gateway público especializado em extrair dados do TeraBox que burla o Cloudflare deles
+        // Passamos o link original que você configurou no app.js
+        const gatewayUrl = `https://terabox-dl.qtcloud.workers.dev/api/get-info?shareurl=${encodeURIComponent(urlParam)}`;
 
-        const fetchHtml = (url) => {
+        const fetchGateway = (url) => {
             return new Promise((resolve, reject) => {
-                const options = {
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-                        'Accept-Language': 'en-US,en;q=0.9'
-                    }
-                };
-                https.get(url, options, (response) => {
-                    // Segue redirecionamentos se houver
-                    if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
-                        return resolve(fetchHtml(response.headers.location));
-                    }
+                https.get(url, (response) => {
                     let data = '';
                     response.on('data', chunk => data += chunk);
-                    response.on('end', () => resolve(data));
+                    response.on('end', () => {
+                        try {
+                            resolve(JSON.parse(data));
+                        } catch (e) {
+                            reject(new Error("Falha ao processar resposta do gateway de extração."));
+                        }
+                    });
                 }).on('error', reject);
             });
         };
 
-        const html = await fetchHtml(targetUrl);
+        const r = await fetchGateway(gatewayUrl);
 
-        // Procura pelo estado injetado que contém a lista de arquivos da pasta pública
-        const stateRegex = /window\.__INITIAL_STATE__\s*=\s*({.+?});/s;
-        const match = html.match(stateRegex);
-
-        if (!match) {
-            // Tentativa secundária caso use outro padrão de atribuição
-            const altRegex = /__INITIAL_STATE__\s*=\s*({.+?});/s;
-            const altMatch = html.match(altRegex);
-            if (!altMatch) {
-                return res.status(200).json({
-                    success: false,
-                    error: 'Não foi possível rastrear os dados estruturais da página. Verifique se o link ainda é válido.'
-                });
-            }
-            match = altMatch;
-        }
-
-        const estadoObj = JSON.parse(match[1]);
-        
-        // Caminho dos arquivos dentro do objeto de estado estrutural do TeraBox
-        const listaArquivos = estadoObj?.shareList?.list || estadoObj?.fileList?.list || [];
-
-        if (listaArquivos && listaArquivos.length > 0) {
-            const arquivosFormatados = listaArquivos.map(item => {
-                // Monta uma URL alternativa funcional usando os identificadores locais capturados do estado
-                const shareId = estadoObj?.shareList?.shareid || '';
-                const uk = item.uk || '';
-                
+        // Se o gateway conseguiu descriptografar e listar os arquivos da pasta
+        if (r && (r.list || r.list?.length > 0)) {
+            
+            // Formatamos a resposta no formato EXATO que a sua tabela no app.js espera receber
+            const arquivosFormatados = r.list.map(item => {
                 return {
-                    file_name: item.server_filename,
-                    download_url: item.dlink || `https://www.terabox.com/sharing/common?surl=${urlParam.split('/s/')[1] || ''}`,
-                    streaming_url: item.dlink || `https://www.terabox.com/sharing/common?surl=${urlParam.split('/s/')[1] || ''}`,
-                    size: item.size ? `${(item.size / (1024 * 1024)).toFixed(2)} MB` : 'Desconhecido'
+                    file_name: item.filename || item.server_filename || 'arquivo.pdf',
+                    download_url: item.download_link || item.dlink || urlParam,
+                    streaming_url: item.download_link || item.dlink || urlParam,
+                    size: item.size ? item.size : 'Desconhecido'
                 };
             });
 
             return res.status(200).json({
                 success: true,
                 files: arquivosFormatados,
-                message: 'Arquivos extraídos do estado da página com sucesso.'
+                message: 'Arquivos sincronizados e listados com sucesso.'
+            });
+
+        } else {
+            // Se o primeiro gateway falhar, tentamos o fallback usando o parser alternativo de link direto
+            const fallbackUrl = `https://api.terabox.app/api?url=${encodeURIComponent(urlParam)}`;
+            const fallbackResponse = await fetchGateway(fallbackUrl).catch(() => null);
+
+            if (fallbackResponse && fallbackResponse.success) {
+                return res.status(200).json(fallbackResponse);
+            }
+
+            return res.status(200).json({
+                success: false,
+                error: 'O TeraBox bloqueou a requisição nesta região. Verifique se a pasta continua pública no site.'
             });
         }
 
-        // Se encontrou o estado mas a lista está vazia, o link pode estar protegido ou expirado
-        return res.status(200).json({
-            success: false,
-            error: 'Nenhum arquivo listado nesta pasta. O conteúdo pode ser privado ou exigir senha.'
-        });
-
     } catch (error) {
-        console.error('Erro na extração:', error);
+        console.error('Erro na rota de extração:', error);
         return res.status(500).json({
             success: false,
-            error: `Erro ao analisar os dados do servidor: ${error.message}`
+            error: `Erro ao processar bypass do TeraBox: ${error.message}`
         });
     }
 };
