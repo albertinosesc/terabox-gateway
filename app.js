@@ -10,7 +10,7 @@ let instrumentoSelecionado = null;
 // CONFIGURAÇÃO DO GOOGLE DRIVE
 // ============================================================
 // Coloque aqui o ID da sua pasta pública do Google Drive
-const ID_PASTA_GOOGLE_DRIVE = "1RtEvi8mUkmu4pTeDcS-XApjO6R7tSB2T"; 
+const ID_PASTA_GOOGLE_DRIVE = "1RtEvi8mUkmu4pTeDcS-XApjO6R7tSB2T";
 
 // ===== Abrir PDF diretamente no visualizador do Navegador =====
 function abrirPDF(caminho) {
