@@ -47,5 +47,49 @@ const dadosLivros = [
     "autor": "996",
     "titulo": "996",
     "arquivo": "pdf/996.pdf"
-  }  // O último item não precisa de vírgula depois de fechar a chave
+  },
+
+  {
+    "numero": "123",
+    "tipo": "PDF",
+    "instrumento": "FLAUTA",
+    "autor": "Pixinguinha",
+    "titulo": "Estudos de Flauta",
+    "arquivo": "testeA/123.pdf",
+    "conta": "CONTA_A" // O site vai abrir e buscar este arquivo na pasta do testeA!
+  },
+  {
+    "numero": "321",
+    "tipo": "PDF",
+    "instrumento": "VIOLÃO",
+    "autor": "Dilermando Reis",
+    "titulo": "Abismo de Rosas",
+    "arquivo": "testeB/321.pdf",
+    "conta": "CONTA_B" // O site vai abrir e buscar este arquivo na pasta do testeB!
+  }
+];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 ];
