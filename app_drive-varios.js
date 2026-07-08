@@ -14,7 +14,7 @@ const PASTAS_GOOGLE_DRIVE = {
     "PADRAO": "1RtEvi8mUkmu4pTeDcS-XApjO6R7tSB2T",
     
     // Suas novas contas mapeadas a partir dos links de teste
-    "CONTA_A": "1AVI0CwQYJybmiESale0wE3kAi44TuhAK",
+    "CONTA_A": "14lAS3mD8jYqFSdTedbUejq1rneI3VOKx",
     "CONTA_B": "18EX9AL0kY5BQfagTk24kcetpmYkOx8FF"
 };
 
