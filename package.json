@@ -1,6 +1,10 @@
 {
   "name": "terabox-gateway",
   "version": "1.0.0",
-  "description": "API para extrair links diretos do TeraBox",
-  "main": "api/index.js"
+  "description": "API para extrair links diretos do TeraBox usando Navegador Serverless",
+  "main": "api/index.js",
+  "dependencies": {
+    "@sparticuz/chromium": "^123.0.0",
+    "puppeteer-core": "^22.6.0"
+  }
 }
