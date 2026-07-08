@@ -13,24 +13,21 @@ let instrumentoSelecionado = null;
 const LINK_PASTA_ONEDRIVE = "https://sescba-my.sharepoint.com/personal/ba7918_sescbahia_com_br/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fba7918%5Fsescbahia%5Fcom%5Fbr%2FDocuments%2FNBM%2Fpdf&ga=1";
 
 // ===== Abrir PDF com busca automatizada dentro do OneDrive =====
+// ===== Abrir PDF direcionando para o visualizador direto do OneDrive Sesc =====
 function abrirPDF(caminho) {
-    // Se o caminho já for um link completo (http/https), abre direto
     if (caminho.startsWith('http://') || caminho.startsWith('https://')) {
         window.open(caminho, '_blank');
         return;
     }
 
-    // 1. Extrai o nome puro do arquivo (ex: "pdf/6945.pdf" vira "6945")
-    const nomeArquivo = caminho.replace('pdf/', '').replace('.pdf', '');
+    // 1. Limpa o nome do arquivo (ex: "pdf/6955.pdf" vira "6955.pdf")
+    const nomeArquivo = caminho.replace('pdf/', '');
 
-    // 2. Codifica o termo para evitar problemas com caracteres especiais ou espaços
-    const termoBusca = encodeURIComponent(nomeArquivo);
+    // 2. Monta o link apontando para o arquivo exato dentro da estrutura de documentos
+    // Usando a chave estruturada sem injetar o parâmetro restrito de busca "&q="
+    const urlDiretaOneDrive = `https://sescba-my.sharepoint.com/personal/ba7918_sescbahia_com_br/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fba7918%5Fsescbahia%5Fcom%5Fbr%2FDocuments%2FNBM%2Fpdf%2F${encodeURIComponent(nomeArquivo)}&parent=%2Fpersonal%2Fba7918%5Fsescbahia%5Fcom%5Fbr%2FDocuments%2FNBM%2Fpdf&ga=1`;
 
-    // 3. Monta a URL injetando o filtro de busca nativo do SharePoint/OneDrive
-    // O OneDrive corporativo aceita a inclusão do parâmetro q ou d para filtragem interna
-    const urlBuscaOneDrive = `${LINK_PASTA_ONEDRIVE}&q=${termoBusca}`;
-    
-    window.open(urlBuscaOneDrive, '_blank');
+    window.open(urlDiretaOneDrive, '_blank');
 }
 
 // ===== Carregar dados (a partir da variável global dados.js) =====
