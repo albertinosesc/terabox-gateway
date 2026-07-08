@@ -1,41 +1,44 @@
 // ============================================================
-// API para extrair links do TeraBox (Node.js)
+// API para extrair links do TeraBox (Node.js - Versão Simplificada)
 // ============================================================
 
 module.exports = async (req, res) => {
-    // ===== Configurar CORS manualmente (fallback) =====
+    // CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    // ===== Responder preflight (OPTIONS) =====
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
 
-    // ===== Obter a URL da query string =====
     const url = req.query.url;
     if (!url) {
         return res.status(400).json({
             success: false,
-            error: 'Parâmetro "url" é obrigatório. Exemplo: ?url=https://1024terabox.com/s/...'
+            error: 'Parâmetro "url" é obrigatório'
         });
     }
 
     try {
-        // ===== Fazer requisição para o TeraBox =====
-        const response = await fetch(url, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8'
-            }
-        });
+        // Usar o módulo 'https' do Node.js (mais compatível que fetch)
+        const https = require('https');
+        const http = require('http');
 
-        const html = await response.text();
+        const fetchPage = (url) => {
+            return new Promise((resolve, reject) => {
+                const client = url.startsWith('https') ? https : http;
+                client.get(url, (response) => {
+                    let data = '';
+                    response.on('data', chunk => data += chunk);
+                    response.on('end', () => resolve(data));
+                }).on('error', reject);
+            });
+        };
 
-        // ===== Extrair links do HTML =====
-        // Padrões de URL do TeraBox
+        const html = await fetchPage(url);
+
+        // Padrões de busca
         const patterns = [
             /"download_url":"([^"]+)"/,
             /"downloadUrl":"([^"]+)"/,
@@ -53,10 +56,7 @@ module.exports = async (req, res) => {
         }
 
         if (linkEncontrado) {
-            // Limpa o link (remove barras invertidas)
             const linkLimpo = linkEncontrado.replace(/\\/g, '');
-            
-            // Tenta extrair o nome do arquivo
             const nomeArquivo = linkLimpo.split('/').pop() || 'arquivo.pdf';
 
             return res.json({
@@ -72,15 +72,15 @@ module.exports = async (req, res) => {
         } else {
             return res.status(404).json({
                 success: false,
-                error: 'Não foi possível extrair o link do arquivo. Verifique se o link é público.'
+                error: 'Link não encontrado. Verifique se o link é público.'
             });
         }
 
     } catch (error) {
-        console.error('Erro na API:', error);
+        console.error('Erro:', error);
         return res.status(500).json({
             success: false,
-            error: `Erro interno: ${error.message}`
+            error: `Erro: ${error.message}`
         });
     }
 };
