@@ -48,6 +48,27 @@ const dadosLivros = [
     "titulo": "996",
     "arquivo": "pdf/996.pdf"
   },
+
+    {
+    "numero": "5",
+    "tipo": "PDF",
+    "instrumento": "5",
+    "autor": "5",
+    "titulo": "5",
+    "arquivo": "pdf/5.pdf", // Ajustado para seguir o padrão do app.js
+    "conta": "CONTA_A"
+  },
+
+    {
+    "numero": "6",
+    "tipo": "PDF",
+    "instrumento": "6",
+    "autor": "6",
+    "titulo": "6",
+    "arquivo": "pdf/6.pdf", // Ajustado para seguir o padrão do app.js
+    "conta": "CONTA_A"
+  },
+  
   {
     "numero": "1234",
     "tipo": "PDF",
