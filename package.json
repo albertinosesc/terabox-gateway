@@ -2,5 +2,5 @@
   "name": "terabox-gateway",
   "version": "1.0.0",
   "description": "API para extrair links diretos do TeraBox",
-  "main": "api.js"
+  "main": "api/index.js"
 }
