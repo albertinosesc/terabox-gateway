@@ -15,7 +15,6 @@ let instrumentoSelecionado = null;
 
 // ===== Função para listar arquivos da pasta TeraBox =====
 async function listarArquivosTeraBox() {
-    // Se já tiver em cache, retorna
     if (cacheArquivosTeraBox) {
         return cacheArquivosTeraBox;
     }
@@ -27,7 +26,6 @@ async function listarArquivosTeraBox() {
         const dados = await resposta.json();
         
         if (dados.success && dados.files && dados.files.length > 0) {
-            // Mapeia os arquivos para um formato mais fácil de usar
             cacheArquivosTeraBox = dados.files.map(arquivo => ({
                 nome: arquivo.file_name,
                 link: arquivo.streaming_url || arquivo.download_url,
@@ -47,16 +45,12 @@ async function listarArquivosTeraBox() {
 
 // ===== Função para abrir PDF (com suporte a TeraBox) =====
 async function abrirPDF(caminho) {
-    // Se já for uma URL completa (não TeraBox)
     if (caminho.startsWith('http://') || caminho.startsWith('https://')) {
         window.open(caminho, '_blank');
         return;
     }
 
-    // Busca a lista de arquivos da pasta TeraBox
     const arquivos = await listarArquivosTeraBox();
-    
-    // Procura o arquivo pelo nome
     const arquivo = arquivos.find(a => a.nome === caminho);
     
     if (arquivo) {
@@ -65,6 +59,8 @@ async function abrirPDF(caminho) {
         alert(`❌ Arquivo "${caminho}" não encontrado na pasta TeraBox.`);
     }
 }
+
+
 
 // ===== Carregar dados (agora a partir da variável global) =====
 function carregarDados() {
