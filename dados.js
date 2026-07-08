@@ -16,37 +16,36 @@ const dadosLivros = [
     "titulo": "Adult Piano Course Book 3",
     "arquivo": "pdf/6955.pdf"
   },
-    {
+  {
     "numero": "999",
     "tipo": "PDF",
     "instrumento": "asasasa",
     "autor": "aaaaa",
     "titulo": "aaaaa",
     "arquivo": "pdf/999.pdf"
-  },
-
-      "numero": "998",
+  }, // <-- Atenção à vírgula fechando o bloco com }
+  {  // <-- Faltava abrir esta chave
+    "numero": "998",
     "tipo": "PDF",
     "instrumento": "1",
     "autor": "1",
     "titulo": "1",
     "arquivo": "pdf/998.pdf"
   },
-
-          "numero": "997",
+  {  // <-- Faltava abrir esta chave
+    "numero": "997",
     "tipo": "PDF",
     "instrumento": "997",
     "autor": "997",
     "titulo": "997",
     "arquivo": "pdf/997.pdf"
   },
-          "numero": "996",
+  {  // <-- Faltava abrir esta chave
+    "numero": "996",
     "tipo": "PDF",
     "instrumento": "996",
     "autor": "996",
     "titulo": "996",
     "arquivo": "pdf/996.pdf"
-  },
-  
-
+  }  // O último item não precisa de vírgula depois de fechar a chave
 ];
