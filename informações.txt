@@ -1,0 +1,6 @@
+Se mudar o site de armazenamento: tais como. One drive, Google drive, Google drive várias pastas, tem que mudar o javascript no index.html
+
+1. One drive: app_one-drive.js
+2. Goolge Drive: app_google-drive.js
+3. Google Drive várias contas: app_drive-varios.js
+4. Pastas local:app_local.js
