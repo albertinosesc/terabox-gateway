@@ -10,7 +10,7 @@ let instrumentoSelecionado = null;
 // CONFIGURAÇÃO DO TERABOX
 // ============================================================
 // Link de compartilhamento da sua pasta pública no TeraBox
-const LINK_PASTA_TERABOX = "https://1024terabox.com/s/1RtEvi8mUkmu4pTeDcS-XApjO6R7tSB2T"; 
+const LINK_PASTA_TERABOX = "https://1024terabox.com/s/1AwSdq7HXjGoAyCosfFiebw"; 
 
 // ===== Abrir PDF com busca automatizada dentro do TeraBox =====
 function abrirPDF(caminho) {
