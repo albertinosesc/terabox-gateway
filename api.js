@@ -1,5 +1,5 @@
 // ============================================================
-// API para extrair links do TeraBox (Node.js - Versão Simplificada)
+// API para extrair links do TeraBox (Node.js)
 // ============================================================
 
 module.exports = async (req, res) => {
@@ -21,7 +21,6 @@ module.exports = async (req, res) => {
     }
 
     try {
-        // Usar o módulo 'https' do Node.js (mais compatível que fetch)
         const https = require('https');
         const http = require('http');
 
@@ -38,7 +37,6 @@ module.exports = async (req, res) => {
 
         const html = await fetchPage(url);
 
-        // Padrões de busca
         const patterns = [
             /"download_url":"([^"]+)"/,
             /"downloadUrl":"([^"]+)"/,
