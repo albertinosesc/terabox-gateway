@@ -1,6 +1,0 @@
-{
-  "name": "terabox-gateway",
-  "version": "1.0.0",
-  "description": "API para extrair links do TeraBox via WAP Endpoint",
-  "main": "api/index.js"
-}
