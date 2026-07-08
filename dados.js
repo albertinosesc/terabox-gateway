@@ -1,113 +1,73 @@
 // dados.js - Todos os livros em um array
 const dadosLivros = [
-  {
-    "numero": "6945",
-    "tipo": "PDF",
-    "instrumento": "PIANO",
-    "autor": "John Thompson",
-    "titulo": "Easiest Piano Course Part 6-1",
-    "arquivo": "pdf/6945.pdf"
-  },
-  {
-    "numero": "6955",
-    "tipo": "PDF",
-    "instrumento": "PIANO",
-    "autor": "Michael Aaron",
-    "titulo": "Adult Piano Course Book 3",
-    "arquivo": "pdf/6955.pdf"
-  },
-  {
-    "numero": "999",
-    "tipo": "PDF",
-    "instrumento": "asasasa",
-    "autor": "aaaaa",
-    "titulo": "aaaaa",
-    "arquivo": "pdf/999.pdf"
-  },
-  {
-    "numero": "998",
-    "tipo": "PDF",
-    "instrumento": "1",
-    "autor": "1",
-    "titulo": "1",
-    "arquivo": "pdf/998.pdf"
-  },
-  {
-    "numero": "997",
-    "tipo": "PDF",
-    "instrumento": "997",
-    "autor": "997",
-    "titulo": "997",
-    "arquivo": "pdf/997.pdf"
-  },
-  {
-    "numero": "996",
-    "tipo": "PDF",
-    "instrumento": "996",
-    "autor": "996",
-    "titulo": "996",
-    "arquivo": "pdf/996.pdf"
-  },
-
-    {
-    "numero": "5",
-    "tipo": "PDF",
-    "instrumento": "5",
-    "autor": "5",
-    "titulo": "5",
-    "arquivo": "pdf/5.pdf", // Ajustado para seguir o padrão do app.js
-    "conta": "CONTA_A"
-  },
-
-    {
-    "numero": "6",
-    "tipo": "PDF",
-    "instrumento": "6",
-    "autor": "6",
-    "titulo": "6",
-    "arquivo": "pdf/6.pdf", // Ajustado para seguir o padrão do app.js
-    "conta": "CONTA_A"
-  },
-  
-  {
-    "numero": "1234",
-    "tipo": "PDF",
-    "instrumento": "FLAUTA",
-    "autor": "Pixinguinha",
-    "titulo": "Estudos de Flauta",
-    "arquivo": "pdf/1234.pdf", // Ajustado para seguir o padrão do app.js
-    "conta": "CONTA_A"
-  },
-  {
-    "numero": "321",
-    "tipo": "PDF",
-    "instrumento": "VIOLÃO",
-    "autor": "Dilermando Reis",
-    "titulo": "Abismo de Rosas",
-    "arquivo": "pdf/321.pdf", // Ajustado para seguir o padrão do app.js
-    "conta": "CONTA_B"
-  },
-  {"numero":"3736","tipo":"PDF","instrumento":"CONTRABAIXO","autor":"Albertino Moura","titulo":"05_Aula_121","arquivo":"pdf/3736.pdf"},
-  {"numero":"3737","tipo":"PDF","instrumento":"CONTRABAIXO","autor":"Albertino Moura","titulo":"03_Aula_121","arquivo":"pdf/3737.pdf"},
-  {"numero":"3738","tipo":"PDF","instrumento":"CLARINETE","autor":"Paul C. Herfurth","titulo":"A Tune a Day for Clarinet","arquivo":"pdf/3738.pdf"},
-  {"numero":"3739","tipo":"PDF","instrumento":"CLARINETE","autor":"Paul C. Herfurth","titulo":"A Tune a Day for Clarinet","arquivo":"pdf/3739.pdf"},
-  {"numero":"3740","tipo":"PDF","instrumento":"PIANO","autor":"Stephan Beneking","titulo":"18 Preludes for one hand alone","arquivo":"pdf/3740.pdf"},
-  {"numero":"3741","tipo":"PDF","instrumento":"PIANO","autor":"Stephan Beneking","titulo":"12 Valses melancoliques III","arquivo":"pdf/3741.pdf"}
+    {"numero":"9","tipo":"PDF","instrumento":"GUITARRA","autor":"Dave Celentano","titulo":"Killer Pentatonics","arquivo":"pdf/9.pdf"},
+  {"numero":"10","tipo":"PDF","instrumento":"GUITARRA","autor":"Dave Celentano","titulo":"essential blues guitar lessons (74p)","arquivo":"pdf/10.pdf"},
+  {"numero":"11","tipo":"PDF","instrumento":"GUITARRA","autor":"Nelson Faria","titulo":"Acordes_Arpejos_E_Escalas","arquivo":"pdf/11.pdf"},
+  {"numero":"12","tipo":"PDF","instrumento":"GUITARRA","autor":"Nelson Faria","titulo":"Estudos para guitarra vol 4","arquivo":"pdf/12.pdf"},
+  {"numero":"13","tipo":"PDF","instrumento":"GUITARRA","autor":"Nelson Faria","titulo":"Estudos_para_guitarra_Vol_1","arquivo":"pdf/13.pdf"},
+  {"numero":"14","tipo":"PDF","instrumento":"GUITARRA","autor":"Nelson Faria","titulo":"Estudos_para_guitarra_vol_6_-*Harmonia_aplicada*(Chord_Melod","arquivo":"pdf/14.pdf"},
+  {"numero":"15","tipo":"PDF","instrumento":"GUITARRA","autor":"Nelson Faria","titulo":"A arte da improvisação","arquivo":"pdf/15.pdf"},
+  {"numero":"16","tipo":"PDF","instrumento":"GUITARRA","autor":"Nelson Faria","titulo":"Brazilian Guitar Book","arquivo":"pdf/16.pdf"},
+  {"numero":"19","tipo":"PDF","instrumento":"ÓRGÃO","autor":"PIANO","titulo":"CCB - Método Novo Estudos para Órgão Eletrônico","arquivo":"pdf/19.pdf"},
+  {"numero":"24","tipo":"PDF","instrumento":"PIANO-VIOLINO","autor":"DANCLA, Charles_Op.107","titulo":"Da_Les_Perles_p_sc_PDF","arquivo":"pdf/24.pdf"},
+  {"numero":"25","tipo":"PDF","instrumento":"VIOLINO","autor":"DANCLA, Charles_Op.107","titulo":"Da_Les_Perles_p_sc_PDF_Les_Perles_violon.*PDF","arquivo":"pdf/25.pdf"},
+  {"numero":"28","tipo":"PDF","instrumento":"LITERATURA","autor":"INSTITUTO ECOFUTURO","titulo":"Pra que serve a Literatura","arquivo":"pdf/28.pdf"},
+  {"numero":"29","tipo":"PDF","instrumento":"FILOSOFIA","autor":"PLATÃO","titulo":"Republica","arquivo":"pdf/29.pdf"},
+  {"numero":"30","tipo":"PDF","instrumento":"EMPREENDEDORISMO","autor":"Bel Pesce","titulo":"A Menina do Vale","arquivo":"pdf/30.pdf"},
+  {"numero":"31","tipo":"PDF","instrumento":"EMPREENDEDORISMO","autor":"NATHALIE TRUTMANN","titulo":"Manual para jovens sonhadores","arquivo":"pdf/31.pdf"},
+  {"numero":"32","tipo":"PDF","instrumento":"EMPREENDEDORISMO","autor":"Rita de Cássia da Costa Malheiros","titulo":"Viagem ao Mundo do Empreendedorismo","arquivo":"pdf/32.pdf"},
+  {"numero":"33","tipo":"PDF","instrumento":"CONTRABAIXO ELÉTRICO","autor":"Ron Carter","titulo":"Building_Jazz_Bass_Lines","arquivo":"pdf/33.pdf"},
+  {"numero":"38","tipo":"PDF","instrumento":"BATERIA -BAIXO","autor":"Cristiano Micalizzi","titulo":"Enciclopedia Dei Ritmi Per Batterie e Basso","arquivo":"pdf/38.pdf"},
+  {"numero":"39","tipo":"PDF","instrumento":"PIANO","autor":"Mario Mascarenhas","titulo":"curso de piano vol. 1","arquivo":"pdf/39.pdf"},
+  {"numero":"40","tipo":"PDF","instrumento":"PIANO","autor":"Burgmuller, F.","titulo":"25 Easy and Progressive Studies, Op 100","arquivo":"pdf/40.pdf"},
+  {"numero":"41","tipo":"PDF","instrumento":"PIANO","autor":"Hanon C. L.","titulo":"The Virtuouso Pianist","arquivo":"pdf/41.pdf"},
+  {"numero":"42","tipo":"PDF","instrumento":"EVANGÉLICO","autor":"SPURGEON, C. H.","titulo":"O CAMINHO DA SALVAÇÃO","arquivo":"pdf/42.pdf"},
+  {"numero":"43","tipo":"PDF","instrumento":"MONOGRAFIA","autor":"DELCI ALVES DE SOUZA","titulo":"MUSICOTERAPIA: CONHECIMENTO, EQUILÍBRIO, SAÚDE MENTAL E BEM ESTAR","arquivo":"pdf/43.pdf"},
+  {"numero":"44","tipo":"PDF","instrumento":"PIANO","autor":"ALFRED","titulo":"Dicionário_De_Acordes_Para_Piano","arquivo":"pdf/44.pdf"},
+  {"numero":"45","tipo":"PDF","instrumento":"VIOLÃO","autor":"Luiz Henrique","titulo":"Apostila_de_violao","arquivo":"pdf/45.pdf"},
+  {"numero":"46","tipo":"PDF","instrumento":"PROJETO","autor":"PROJETO SACI ARTE","titulo":"PROJETO DE INICIAÇÃO MUSICAL","arquivo":"pdf/46.pdf"},
+  {"numero":"47","tipo":"PDF","instrumento":"FLAUTA DOCE","autor":"ALBERTINO MOURA BARBOSA FILHO","titulo":"MÚSICAS EVANGÉLICAS VOL 1","arquivo":"pdf/47.pdf"},
+  {"numero":"48","tipo":"PDF","instrumento":"TROMPETE","autor":"ARBAN, J. B.","titulo":"Complete_Conservatory_Method_for_Trumpet","arquivo":"pdf/48.pdf"},
+  {"numero":"49","tipo":"PDF","instrumento":"TROMPETE","autor":"Paul C. Herfurth","titulo":"A TUNE A DAY FOR TRUMPET vol 1 & 2","arquivo":"pdf/49.pdf"},
+  {"numero":"50","tipo":"PDF","instrumento":"TROMPETE","autor":"ARBAN, J. B.","titulo":"Method_for_Trumpet","arquivo":"pdf/50.pdf"},
+  {"numero":"51","tipo":"PDF","instrumento":"TROMPETE","autor":"PROJETO FORTALECIMENTO MUSICAL","titulo":"MÉTODO BÁSICO PARA TROMPETE","arquivo":"pdf/51.pdf"},
+  {"numero":"52","tipo":"PDF","instrumento":"TROMPETE","autor":"AMADEU RUSSO","titulo":"MÉTODO DE PISTÃO, TROMBONE E BOMBARDINO","arquivo":"pdf/52.pdf"},
+  {"numero":"53","tipo":"PDF","instrumento":"SAX TENOR","autor":"Sandy Feldstein","titulo":"Yamaha Band Student","arquivo":"pdf/53.pdf"},
+  {"numero":"54","tipo":"PDF","instrumento":"STUDIO","autor":"DANILO GUSTAVO","titulo":"COMO MONTAR UM HOME STUDIO","arquivo":"pdf/54.pdf"},
+  {"numero":"55","tipo":"PDF","instrumento":"PSICOLOGIA","autor":"VIVER DE BLOG","titulo":"O PODER DAS CORES NO MARKETING E NO DIA-A-DIA","arquivo":"pdf/55.pdf"},
+  {"numero":"56","tipo":"PDF","instrumento":"VIOLÃO","autor":"HAL LEONARD","titulo":"CATÁLOGO CLASSICAL GUITAR","arquivo":"pdf/56.pdf"},
+  {"numero":"57","tipo":"PDF","instrumento":"INSTRUMENTS","autor":"PARTITURAS.PT","titulo":"CATÁLOGO DE LIVROS DE INSTRUMENTOS MUSICAIS","arquivo":"pdf/57.pdf"},
+  {"numero":"58","tipo":"PDF","instrumento":"MELODIA CIFRAS","autor":"CAETAANO VELOSO","titulo":"VOCÊ É LINDA","arquivo":"pdf/58.pdf"},
+  {"numero":"59","tipo":"PDF","instrumento":"PIANO","autor":"DEBUSSY","titulo":"REVERIE","arquivo":"pdf/59.pdf"},
+  {"numero":"61","tipo":"PDF","instrumento":"CEEP","autor":"ALBERTINO MOURA BARBOSA FILHO","titulo":"BIOTÉRIO ATIREI O PAU NO GATO","arquivo":"pdf/61.pdf"},
+  {"numero":"62","tipo":"PDF","instrumento":"ARTIGO","autor":"PIANO","titulo":"TARCÍSIO GOMES FILHO","arquivo":"pdf/62.pdf"},
+  {"numero":"63","tipo":"PDF","instrumento":"ARTIGO","autor":"PIANO","titulo":"JÚNIA GONÇALVES SANTIAGO -PROGRESSÃO DA DIFICULDADE TÉCNICA NAS TRÊS SUÍTES BRASILEIRAS PARA PIANO DE OSCAR LORENZO FERNÂNDEZ","arquivo":"pdf/63.pdf"},
+  {"numero":"64","tipo":"PDF","instrumento":"PIANO","autor":"CONSERVATÓRIO DE MÚSICA CALOUSTE GULBENKIAN DE BRAGA","titulo":"PROGRAMA OFICIAL DE PIANO","arquivo":"pdf/64.pdf"},
+  {"numero":"66","tipo":"PDF","instrumento":"PIANO","autor":"UFRGS","titulo":"ESTUDOS E EXERCÍCIOS PARA PIANO","arquivo":"pdf/66.pdf"},
+  {"numero":"67","tipo":"PDF","instrumento":"HARMONIA","autor":"ALAN GOMES","titulo":"Curso_de_harmonia_1_Net_Cursos","arquivo":"pdf/67.pdf"},
+  {"numero":"68","tipo":"PDF","instrumento":"HARMONIA","autor":"MARIA LÚCIA PASCAL","titulo":"ESTRUTURA TONAL HARMONIA","arquivo":"pdf/68.pdf"},
+  {"numero":"69","tipo":"PDF","instrumento":"TEORIA","autor":"ANTENOR DE CARVALHO NETO","titulo":"DOMINANTES SECUNDÁRIOS","arquivo":"pdf/69.pdf"},
+  {"numero":"71","tipo":"PDF","instrumento":"HARMONIA","autor":"Dave Cazier","titulo":"Jazz Piano Voicings","arquivo":"pdf/71.pdf"},
+  {"numero":"72","tipo":"PDF","instrumento":"HARMONIA","autor":"Bob Keller","titulo":"Rootless Voicings for Jazz","arquivo":"pdf/72.pdf"},
+  {"numero":"73","tipo":"PDF","instrumento":"SESI","autor":"GUIA DO ALUNO","titulo":"Guia_do_Aluno_cursos_modulares","arquivo":"pdf/73.pdf"},
+  {"numero":"78","tipo":"PDF","instrumento":"HARMONIA","autor":"ALAN GOMES","titulo":"Curso_de_harmonia_2_Net_Cursos","arquivo":"pdf/78.pdf"},
+  {"numero":"79","tipo":"PDF","instrumento":"TEORIA","autor":"BUHUMIL MED","titulo":"buhumil med","arquivo":"pdf/79.pdf"},
+  {"numero":"80","tipo":"PDF","instrumento":"TEORIA","autor":"KOELLREUTTER H. J.","titulo":"Contraponto Modal do Séc XVI","arquivo":"pdf/80.pdf"},
+  {"numero":"81","tipo":"PDF","instrumento":"PIANO","autor":"Livro","titulo":"Edna Mae Burnam - A dozen a day","arquivo":"pdf/81.pdf"},
+  {"numero":"82","tipo":"PDF","instrumento":"PIANO","autor":"BERENS","titulo":"Berens","arquivo":"pdf/82.pdf"},
+  {"numero":"84","tipo":"PDF","instrumento":"PIANO","autor":"Herz","titulo":"Gammes et Exercices","arquivo":"pdf/84.pdf"},
+  {"numero":"85","tipo":"PDF","instrumento":"PIANO","autor":"Philipp","titulo":"Complete School of Technic for the Piano","arquivo":"pdf/85.pdf"},
+  {"numero":"86","tipo":"PDF","instrumento":"PIANO","autor":"Plaidy","titulo":"Technical Studies","arquivo":"pdf/86.pdf"},
+  {"numero":"87","tipo":"PDF","instrumento":"SAXOFONE","autor":"AMADEU RUSSO","titulo":"SAXOFONE-METODO-Amadeu-Russo","arquivo":"pdf/87.pdf"},
+  {"numero":"88","tipo":"PDF","instrumento":"ÓRGÃO","autor":"PIANO","titulo":"CCB - Método Novo Estudos para Órgão Eletrônico","arquivo":"pdf/88.pdf"},
+  {"numero":"89","tipo":"PDF","instrumento":"TEORIA","autor":"IAN GUEST","titulo":"CURSO DE Arranjo","arquivo":"pdf/89.pdf"},
+  {"numero":"90","tipo":"PDF","instrumento":"EVANGÉLICO","autor":"João Alexandre","titulo":"\"Ferramentas Para Equipes de Música na Igreja” Módulo I","arquivo":"pdf/90.pdf"},
+  {"numero":"91","tipo":"PDF","instrumento":"PIANO","autor":"Alfred's","titulo":"Basic Piano Library - All-in-one Course","arquivo":"pdf/91.pdf"},
+  {"numero":"92","tipo":"PDF","instrumento":"PIANO","autor":"Alfred's","titulo":"Premier Piano Course","arquivo":"pdf/92.pdf"},
+  {"numero":"93","tipo":"PDF","instrumento":"PIANO","autor":"Alfred's","titulo":"Premier Piano Course","arquivo":"pdf/93.pdf"},
+  {"numero":"94","tipo":"PDF","instrumento":"PIANO","autor":"Alfred's","titulo":"Premier Piano Course","arquivo":"pdf/94.pdf"},
+  {"numero":"99","tipo":"PDF","instrumento":"PIANO","autor":"Albert Ammons","titulo":"Monday Struggle","arquivo":"pdf/99.pdf"},
+  {"numero":"100","tipo":"PDF","instrumento":"PIANO","autor":"Albert Ammons","titulo":"Shout For Joy","arquivo":"pdf/100.pdf"}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
 ]; // Fechado corretamente apenas uma vez
