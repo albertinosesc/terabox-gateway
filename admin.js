@@ -1,3 +1,5 @@
+// admin.js - Gerenciador Otimizado com campo Conta
+
 // ===== Variáveis =====
 let livros = [];
 let indiceEditando = -1;
@@ -21,7 +23,7 @@ function renderizarTabelaAdmin() {
     const tbody = document.getElementById('tabelaAdmin');
     if (!tbody) return;
     if (livros.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">Nenhum livro cadastrado.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px;">Nenhum livro cadastrado.</td></tr>';
         return;
     }
     let html = '';
@@ -33,6 +35,7 @@ function renderizarTabelaAdmin() {
                 <td>${livro.instrumento}</td>
                 <td>${livro.autor}</td>
                 <td>${livro.titulo}</td>
+                <td style="font-family: monospace; font-weight: bold; color: #2b6cb0;">${livro.conta || 'PADRAO'}</td>
                 <td>
                     <button class="btn-edit" onclick="editarLivro(${idx})">✏️</button>
                     <button class="btn-delete" onclick="excluirLivro(${idx})">🗑️</button>
@@ -43,13 +46,14 @@ function renderizarTabelaAdmin() {
     tbody.innerHTML = html;
 }
 
-// ===== Salvar (individual) – UM ALERTA =====
+// ===== Salvar (individual) =====
 function salvarLivro() {
     const numero = document.getElementById('txtNumero').value.trim();
     const tipo = document.getElementById('txtTipo').value.trim();
     const instrumento = document.getElementById('txtInstrumento').value.trim();
     const autor = document.getElementById('txtAutor').value.trim();
     const titulo = document.getElementById('txtTitulo').value.trim();
+    const letraConta = document.getElementById('txtLetraConta').value.trim().toUpperCase();
     const arquivo = document.getElementById('txtArquivo').value.trim() || `pdf/${numero}.pdf`;
 
     if (!numero || !tipo || !instrumento || !autor || !titulo) {
@@ -57,7 +61,13 @@ function salvarLivro() {
         return;
     }
 
+    // Cria o objeto base do livro
     const novoLivro = { numero, tipo, instrumento, autor, titulo, arquivo };
+
+    // Se o usuário digitou uma letra de conta, adiciona o prefixo fixo
+    if (letraConta) {
+        novoLivro.conta = `CONTA_${letraConta}`;
+    }
 
     if (indiceEditando === -1) {
         livros.push(novoLivro);
@@ -66,7 +76,7 @@ function salvarLivro() {
         livros[indiceEditando] = novoLivro;
         alert(`✅ "${titulo}" atualizado com sucesso!`);
         indiceEditando = -1;
-        document.getElementById('btnSalvar').textContent = 'Salvar';
+        document.getElementById('btnSalvar').textContent = '💾 Salvar';
     }
 
     renderizarTabelaAdmin();
@@ -82,10 +92,16 @@ function editarLivro(idx) {
     document.getElementById('txtAutor').value = livro.autor;
     document.getElementById('txtTitulo').value = livro.titulo;
     document.getElementById('txtArquivo').value = livro.arquivo;
-    indiceEditando = idx;
-    document.getElementById('btnSalvar').textContent = 'Atualizar';
     
-    // Marca que o arquivo foi modificado manualmente (para não sobrescrever)
+    // Se o livro já tem uma conta configurada (ex: "CONTA_A"), extrai apenas a letra ("A")
+    if (livro.conta && livro.conta.startsWith('CONTA_')) {
+        document.getElementById('txtLetraConta').value = livro.conta.replace('CONTA_', '');
+    } else {
+        document.getElementById('txtLetraConta').value = '';
+    }
+
+    indiceEditando = idx;
+    document.getElementById('btnSalvar').textContent = '🔄 Atualizar';
     window.arquivoModificado = true;
 }
 
@@ -99,7 +115,7 @@ function excluirLivro(idx) {
         if (indiceEditando === idx) {
             limparFormulario();
             indiceEditando = -1;
-            document.getElementById('btnSalvar').textContent = 'Salvar';
+            document.getElementById('btnSalvar').textContent = '💾 Salvar';
         }
     }
 }
@@ -111,10 +127,11 @@ function limparFormulario() {
     document.getElementById('txtInstrumento').value = '';
     document.getElementById('txtAutor').value = '';
     document.getElementById('txtTitulo').value = '';
+    document.getElementById('txtLetraConta').value = '';
     document.getElementById('txtArquivo').value = '';
     indiceEditando = -1;
-    document.getElementById('btnSalvar').textContent = 'Salvar';
-    window.arquivoModificado = false; // Reseta o flag
+    document.getElementById('btnSalvar').textContent = '💾 Salvar';
+    window.arquivoModificado = false;
 }
 
 // ===== EXPORTAR JSON =====
@@ -125,7 +142,7 @@ function exportarJSON() {
     }
     let json = '[\n';
     livros.forEach((livro, index) => {
-        json += JSON.stringify(livro);
+        json += "  " + JSON.stringify(livro);
         if (index < livros.length - 1) {
             json += ',\n';
         } else {
@@ -181,23 +198,44 @@ function importarLote() {
     let importados = [];
     let ignorados = [];
 
-    linhas.forEach((linha, index) => {
+    linhas.forEach((linha) => {
         const linhaNormalizada = linha.replace(/[–—]/g, '-');
         const partes = linhaNormalizada.split(' - ').map(p => p.trim());
+        
+        // Suporta os formatos normais de 5 partes ou o estendido de 6 partes (com a conta)
         if (partes.length >= 5) {
-            const [numero, tipo, instrumento, autor, ...resto] = partes;
-            const titulo = resto.join(' - ');
-            const arquivo = `pdf/${numero}.pdf`;
+            const numero = partes[0];
+            const tipo = partes[1];
+            const instrumento = partes[2];
+            const autor = partes[3];
+            let titulo = partes[4];
+            let letraConta = partes[5] ? partes[5].toUpperCase() : '';
 
+            // Caso o título contenha hífens acidentais e empurre a conta para frentes maiores
+            if (partes.length > 6) {
+                letraConta = partes[partes.length - 1].toUpperCase();
+                // Reconstrói o título juntando o meio
+                titulo = partes.slice(4, partes.length - 1).join(' - ');
+            }
+
+            const arquivo = `pdf/${numero}.pdf`;
             const existe = livros.some(l => l.numero === numero);
+
             if (!existe) {
-                livros.push({ numero, tipo, instrumento, autor, titulo, arquivo });
-                importados.push({ numero, tipo, instrumento, autor, titulo, arquivo });
+                const itemLivro = { numero, tipo, instrumento, autor, titulo, arquivo };
+                
+                // Se a 6ª parte for apenas uma única letra ou código válido de conta
+                if (letraConta && letraConta.length <= 3) {
+                    itemLivro.conta = `CONTA_${letraConta}`;
+                }
+
+                livros.push(itemLivro);
+                importados.push(itemLivro);
             } else {
                 ignorados.push({ linha: linha, motivo: 'Número já existe' });
             }
         } else {
-            ignorados.push({ linha: linha, motivo: 'Formato inválido' });
+            ignorados.push({ line: linha, motivo: 'Formato inválido (Mínimo de 5 campos)' });
         }
     });
 
@@ -212,9 +250,6 @@ function importarLote() {
     }
     if (ignorados.length > 0) {
         mensagem += `⚠️ ${ignorados.length} linha(s) ignoradas.`;
-    }
-    if (importados.length === 0 && ignorados.length === 0) {
-        mensagem = 'Nenhuma alteração.';
     }
 
     feedback.className = 'feedback success';
@@ -248,9 +283,9 @@ function baixarRelatorio() {
 
     if (ultimoImportados.length > 0) {
         texto += `📥 LIVROS IMPORTADOS (${ultimoImportados.length}):\n`;
-        texto += 'Número - Tipo - Instrumento - Autor - Título\n';
+        texto += 'Número - Tipo - Instrumento - Autor - Título - Conta\n';
         ultimoImportados.forEach(l => {
-            texto += `${l.numero} - ${l.tipo} - ${l.instrumento} - ${l.autor} - ${l.titulo}\n`;
+            texto += `${l.numero} - ${l.tipo} - ${l.instrumento} - ${l.autor} - ${l.titulo} - ${l.conta || 'PADRAO'}\n`;
         });
         texto += '\n';
     }
@@ -276,7 +311,6 @@ function baixarRelatorio() {
 function atualizarArquivoAutomatico() {
     const numero = document.getElementById('txtNumero').value.trim();
     const arquivoInput = document.getElementById('txtArquivo');
-    // Só atualiza se o usuário ainda não tiver modificado manualmente
     if (!window.arquivoModificado) {
         arquivoInput.value = numero ? `pdf/${numero}.pdf` : '';
     }
@@ -286,28 +320,23 @@ function atualizarArquivoAutomatico() {
 document.addEventListener('DOMContentLoaded', () => {
     carregarDados();
 
-    // Inicializa o flag de controle
     window.arquivoModificado = false;
 
-    // Campos do formulário
     const txtNumero = document.getElementById('txtNumero');
     const txtArquivo = document.getElementById('txtArquivo');
 
-    // Quando digitar no número, atualiza o arquivo automaticamente (se não modificado)
     txtNumero.addEventListener('input', atualizarArquivoAutomatico);
 
-    // Quando o usuário digitar no campo arquivo, marca como modificado
     txtArquivo.addEventListener('input', () => {
         window.arquivoModificado = true;
     });
 
-    // Quando limpar o formulário, reseta o flag
     document.getElementById('btnLimpar').addEventListener('click', () => {
         window.arquivoModificado = false;
         limparFormulario();
     });
 
-    // Botões
+    // Eventos dos botões
     document.getElementById('btnSalvar').addEventListener('click', salvarLivro);
     document.getElementById('btnExportar').addEventListener('click', exportarJSON);
     document.getElementById('btnApagarTodos').addEventListener('click', apagarTodos);
