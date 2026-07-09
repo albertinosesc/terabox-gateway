@@ -185,7 +185,9 @@ function renderizarAutores() {
     const container = document.getElementById('autores');
     const mapa = new Map();
     livros.forEach(l => mapa.set(l.autor, (mapa.get(l.autor) || 0) + 1));
-    const lista = Array.from(mapa.entries()).sort((a, b) => b[1] - a[1]);
+    
+    // ORDENAÇÃO ALFABÉTICA: Compara o nome do autor [0] em vez da quantidade [1]
+    const lista = Array.from(mapa.entries()).sort((a, b) => a[0].localeCompare(b[0]));
 
     let html = '<h1>✍️ Autores</h1><div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;">';
     lista.forEach(([autor, qtd]) => {
@@ -216,7 +218,9 @@ function renderizarInstrumentos() {
     const container = document.getElementById('instrumentos');
     const mapa = new Map();
     livros.forEach(l => mapa.set(l.instrumento, (mapa.get(l.instrumento) || 0) + 1));
-    const lista = Array.from(mapa.entries()).sort((a, b) => b[1] - a[1]);
+    
+    // ORDENAÇÃO ALFABÉTICA: Compara o nome do instrumento [0] de A a Z
+    const lista = Array.from(mapa.entries()).sort((a, b) => a[0].localeCompare(b[0]));
 
     let html = '<h1>🎸 Instrumentos</h1><div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;">';
     lista.forEach(([inst, qtd]) => {
