@@ -11,16 +11,26 @@
         .admin-panel table { font-size: 0.85rem; }
         .admin-panel th, .admin-panel td { padding: 8px 6px; }
         .admin-panel .btn-group { flex-wrap: wrap; }
-        .admin-panel textarea {
+        
+        /* Estilos para a DIV editável que substitui o textarea */
+        .admin-panel .div-lote-editable {
             width: 100%;
-            height: 150px;
+            height: 180px;
             font-family: monospace;
             font-size: 0.9rem;
-            padding: 8px;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            resize: vertical;
+            overflow-y: auto;
+            background: #fff;
+            white-space: pre-wrap;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
+        .admin-panel .div-lote-editable:focus {
+            border-color: #2196F3;
+            outline: none;
+        }
+
         .admin-panel .import-section {
             background: #f8fafc;
             padding: 15px;
@@ -73,18 +83,6 @@
             padding-left: 4px !important;
             text-transform: uppercase;
         }
-
-        /* Estilos para a sinalização visual de linhas do lote */
-        .linha-marcada {
-            padding: 6px 10px;
-            margin: 4px 0;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 0.85rem;
-            line-height: 1.4;
-        }
-        .linha-marcada.sucesso { background: #e2f0d9; color: #385723; border-left: 5px solid #70ad47; }
-        .linha-marcada.erro { background: #fce4d6; color: #c65911; border-left: 5px solid #ffc000; }
     </style>
 </head>
 <body>
@@ -101,14 +99,16 @@
                 <h3>📥 Importar em Lote</h3>
                 <p>Cole abaixo os livros no formato: <strong>Número - Tipo - Instrumento - Autor - Título - Letra da Conta (Opcional)</strong></p>
                 <p style="font-size: 0.85rem; color: #555; margin-top: -5px;">Exemplo: 6945 - PDF - PIANO - John Thompson - Easiest Piano Course Part 6-1 - A</p>
-                <textarea id="txtLote" placeholder="Exemplo:&#10;6945 - PDF - PIANO - John Thompson - Easiest Piano Course Part 6-1 - A&#10;6955 - PDF - PIANO - Michael Aaron - Adult Piano Course Book 3 - B"></textarea>
-                <div class="btn-group">
-                    <button id="btnImportarLote" class="btn-import-lote">📥 Importar Lote</button>
-                    <button id="btnLimparLote" class="btn-clear">🧹 Limpar</button>
-                    <button id="btnBaixarRelatorio" class="btn-import" style="display:none;">📄 Baixar Relatório Erros/Acertos</button>
+                
+                <div id="txtLote" class="div-lote-editable" contenteditable="true" placeholder="Cole as linhas aqui..."></div>
+                
+                <div class="btn-group" style="display:flex; gap:8px; margin-top:10px;">
+                    <button id="btnValidarLote" class="btn-import-lote" style="background: #2196F3;">🔍 Validar Linhas</button>
+                    <button id="btnImportarLote" class="btn-import-lote">📥 Confirmar e Importar</button>
+                    <button id="btnLimparLote" class="btn-clear">🧹 Limpar Campo</button>
+                    <button id="btnBaixarRelatorio" class="btn-import" style="display:none;">📄 Baixar Relatório TXT</button>
                 </div>
                 <div id="feedbackLote" class="feedback"></div>
-                <div id="detalhesImportacao" style="margin-top:15px; background:#fff; padding:12px; border-radius:6px; border:1px solid #e9edf2; display:none;"></div>
             </div>
             
             <form id="formLivro">
@@ -134,16 +134,16 @@
             </form>
             
             <div class="btn-group" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; margin-bottom:20px;">
-    <button type="button" id="btnSalvar" class="btn-save">💾 Salvar</button>
-    <button type="button" id="btnLimpar" class="btn-clear">🧹 Limpar</button>
-    
-    <button type="button" id="btnExportarJSON" class="btn-export" style="background:#009688; color:#fff;">📤 Exportar JSON (.json)</button>
-    <button type="button" id="btnExportarTXTPadrao" class="btn-export" style="background:#673ab7; color:#fff;">📄 Exportar Lista TXT (.txt)</button>
-    <button type="button" id="btnExportarTXTJson" class="btn-export" style="background:#3f51b5; color:#fff;">📝 Exportar Bloco JSON em TXT (.txt)</button>
-    
-    <button type="button" id="btnApagarTodos" class="btn-delete" style="background:#d32f2f;">🗑️ Apagar Todos</button>
-    <button type="button" id="btnResetar" class="btn-clear" style="background:#ff9800; color:#fff;">🔄 Resetar Dados</button>
-</div>
+                <button type="button" id="btnSalvar" class="btn-save">💾 Salvar Individual</button>
+                <button type="button" id="btnLimpar" class="btn-clear">🧹 Limpar Form</button>
+                
+                <button type="button" id="btnExportarJSON" class="btn-export" style="background:#009688; color:#fff;">📤 Exportar JSON (.json)</button>
+                <button type="button" id="btnExportarTXTPadrao" class="btn-export" style="background:#673ab7; color:#fff;">📄 Exportar Lista TXT (.txt)</button>
+                <button type="button" id="btnExportarTXTJson" class="btn-export" style="background:#3f51b5; color:#fff;">📝 Exportar Bloco JSON em TXT (.txt)</button>
+                
+                <button type="button" id="btnApagarTodos" class="btn-delete" style="background:#d32f2f;">🗑️ Apagar Todos</button>
+                <button type="button" id="btnResetar" class="btn-clear" style="background:#ff9800; color:#fff;">🔄 Resetar Dados</button>
+            </div>
                         
             <div class="table-container">
                 <table>
