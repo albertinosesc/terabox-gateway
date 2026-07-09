@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -12,26 +11,16 @@
         .admin-panel table { font-size: 0.85rem; }
         .admin-panel th, .admin-panel td { padding: 8px 6px; }
         .admin-panel .btn-group { flex-wrap: wrap; }
-        
-        /* Estilos para a DIV editável que substitui o textarea */
-        .admin-panel .div-lote-editable {
+        .admin-panel textarea {
             width: 100%;
-            height: 350px;
+            height: 150px;
             font-family: monospace;
             font-size: 0.9rem;
-            padding: 10px;
+            padding: 8px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            overflow-y: auto;
-            background: #fff;
-            white-space: pre-wrap;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            resize: vertical;
         }
-        .admin-panel .div-lote-editable:focus {
-            border-color: #2196F3;
-            outline: none;
-        }
-
         .admin-panel .import-section {
             background: #f8fafc;
             padding: 15px;
@@ -61,29 +50,6 @@
         }
         .feedback.success { background: #d4edda; color: #155724; display: block; }
         .feedback.error { background: #f8d7da; color: #721c24; display: block; }
-                
-        /* Container especial para o prefixo CONTA_ fixo */
-        .input-conta-container {
-            display: flex;
-            align-items: center;
-            background: #fff;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            padding-left: 10px;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-        }
-        .input-conta-container span {
-            font-family: monospace;
-            font-weight: bold;
-            color: #666;
-            user-select: none;
-        }
-        .input-conta-container input {
-            border: none !important;
-            box-shadow: none !important;
-            padding-left: 4px !important;
-            text-transform: uppercase;
-        }
     </style>
 </head>
 <body>
@@ -95,71 +61,63 @@
     <div class="main">
         <div class="admin-panel">
             <h1>⚙️ Gerenciar Livros</h1>
-            
-            <div class="import-section">
-                <h3>📥 Importar em Lote</h3>
-                <p>Cole abaixo os livros no formato: <strong>Número - Tipo - Instrumento - Autor - Título - Letra da Conta (Opcional)</strong></p>
-                <p style="font-size: 0.85rem; color: #555; margin-top: -5px;">Exemplo: 6945 - PDF - PIANO - John Thompson - Easiest Piano Course Part 6-1 - A</p>
-                
-                <div id="txtLote" class="div-lote-editable" contenteditable="true" placeholder="Cole as linhas aqui..."></div>
-                
-                <div class="btn-group" style="display:flex; gap:8px; margin-top:10px;">
-                    <button id="btnValidarLote" class="btn-import-lote" style="background: #2196F3;">🔍 Validar Linhas</button>
-                    <button id="btnImportarLote" class="btn-import-lote">📥 Confirmar e Importar</button>
-                    <button id="btnLimparLote" class="btn-clear">🧹 Limpar Campo</button>
-                    <button id="btnBaixarRelatorio" class="btn-import" style="display:none;">📄 Baixar Relatório TXT</button>
-                </div>
-                <div id="feedbackLote" class="feedback"></div>
-            </div>
-            
-            <form id="formLivro">
-                <label>Número *</label>
-                <input type="text" id="txtNumero" placeholder="Ex: 6945" required>
-                <label>Tipo *</label>
-                <input type="text" id="txtTipo" placeholder="PDF, Livro, Artigo..." required>
-                <label>Instrumento *</label>
-                <input type="text" id="txtInstrumento" placeholder="PIANO, GUITARRA..." required>
-                <label>Autor *</label>
-                <input type="text" id="txtAutor" placeholder="Nome do autor" required>
-                <label>Título *</label>
-                <input type="text" id="txtTitulo" placeholder="Título do livro" required>
-                                
-                <label>Letra da Conta do Google Drive (Opcional)</label>
-                <div class="input-conta-container">
-                    <span>CONTA_</span>
-                    <input type="text" id="txtLetraConta" placeholder="A, B, C..." maxlength="5">
-                </div>
 
-                <label>Arquivo PDF</label>
-                <input type="text" id="txtArquivo" placeholder="pdf/6945.pdf">
-            </form>
-            
-            <div class="btn-group" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; margin-bottom:20px;">
-                <button type="button" id="btnSalvar" class="btn-save">💾 Salvar Individual</button>
-                <button type="button" id="btnLimpar" class="btn-clear">🧹 Limpar Form</button>
-                
-                <button type="button" id="btnExportarJSON" class="btn-export" style="background:#009688; color:#fff;">📤 Exportar JSON (.json)</button>
-                <button type="button" id="btnExportarTXTPadrao" class="btn-export" style="background:#673ab7; color:#fff;">📄 Exportar Lista TXT (.txt)</button>
-                <button type="button" id="btnExportarTXTJson" class="btn-export" style="background:#3f51b5; color:#fff;">📝 Exportar Bloco JSON em TXT (.txt)</button>
-                
-                <button type="button" id="btnApagarTodos" class="btn-delete" style="background:#d32f2f;">🗑️ Apagar Todos</button>
-                <button type="button" id="btnResetar" class="btn-clear" style="background:#ff9800; color:#fff;">🔄 Resetar Dados</button>
-            </div>
-                        
+            <!-- Seção de importação em lote -->
+            <!-- Seção de importação em lote -->
+<div class="import-section">
+    <h3>📥 Importar em Lote</h3>
+    <p>Cole abaixo os livros no formato: <strong>Número - Tipo - Instrumento - Autor - Título</strong></p>
+    <textarea id="txtLote" placeholder="Exemplo:&#10;6945 - PDF - PIANO - John Thompson - Easiest Piano Course Part 6-1&#10;6946 - PDF - PIANO - John Thompson - Easiest Piano Course Part 6-2"></textarea>
+    <div class="btn-group">
+        <button id="btnImportarLote" class="btn-import-lote">📥 Importar Lote</button>
+        <button id="btnLimparLote" class="btn-clear">🧹 Limpar</button>
+        <button id="btnBaixarRelatorio" class="btn-import" style="display:none;">📄 Baixar Relatório TXT</button>
+    </div>
+    <div id="feedbackLote" class="feedback"></div>
+    <div id="detalhesImportacao" style="margin-top:10px; background:#fff; padding:10px; border-radius:6px; border:1px solid #e9edf2; display:none;"></div>
+</div>
+
+          <!-- Formulário individual -->
+<form id="formLivro">
+    <label>Número *</label>
+    <input type="text" id="txtNumero" placeholder="Ex: 6945" required>
+    <label>Tipo *</label>
+    <input type="text" id="txtTipo" placeholder="PDF, Livro, Artigo..." required>
+    <label>Instrumento *</label>
+    <input type="text" id="txtInstrumento" placeholder="PIANO, GUITARRA..." required>
+    <label>Autor *</label>
+    <input type="text" id="txtAutor" placeholder="Nome do autor" required>
+    <label>Título *</label>
+    <input type="text" id="txtTitulo" placeholder="Título do livro" required>
+    <label>Arquivo PDF</label>
+    <input type="text" id="txtArquivo" placeholder="pdf/6945.pdf">
+</form>
+
+<!-- Botões (fora do formulário, alinhados) -->
+<div class="btn-group" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; margin-bottom:20px;">
+    <button type="button" id="btnSalvar" class="btn-save">💾 Salvar</button>
+    <button type="button" id="btnLimpar" class="btn-clear">🧹 Limpar</button>
+    <button type="button" id="btnExportar" class="btn-export">📤 Exportar JSON</button>
+    <button type="button" id="btnApagarTodos" class="btn-delete" style="background:#d32f2f;">🗑️ Apagar Todos</button>
+    <button type="button" id="btnResetar" class="btn-clear" style="background:#ff9800; color:#fff;">🔄 Resetar Dados</button>
+</div>
+            <!-- Tabela de livros -->
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
-                            <th>Nº</th><th>Tipo</th><th>Instrumento</th><th>Autor</th><th>Título</th><th>Conta</th><th>Ações</th>
+                            <th>Nº</th><th>Tipo</th><th>Instrumento</th><th>Autor</th><th>Título</th><th>Ações</th>
                         </tr>
                     </thead>
                     <tbody id="tabelaAdmin">
-                        <tr><td colspan="7">Carregando...</td></tr>
+                        <tr><td colspan="6">Carregando...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <!-- Carrega os dados globais (dados.js) e o admin.js -->
     <script src="dados.js"></script>
     <script src="admin.js"></script>
 </body>
