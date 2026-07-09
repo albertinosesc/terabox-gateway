@@ -198,19 +198,27 @@ function exportarTXT() {
 
 
 // ===== Página Autores =====
+// ===== Página Autores =====
 function renderizarAutores() {
     const container = document.getElementById('autores');
     const mapa = new Map();
     livros.forEach(l => mapa.set(l.autor, (mapa.get(l.autor) || 0) + 1));
     
-    // ORDENAÇÃO ALFABÉTICA: Compara o nome do autor [0] em vez da quantidade [1]
     const lista = Array.from(mapa.entries()).sort((a, b) => a[0].localeCompare(b[0]));
 
-    let html = '<h1>✍️ Autores</h1><div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;">';
+    // 1. Criamos o título
+    let html = '<h1>✍️ Autores</h1>';
+    
+    // 2. Abrimos a div que o CSS transforma em Planilha
+    html += '<div class="planilha-grid">';
     lista.forEach(([autor, qtd]) => {
         html += `<span class="list-item" onclick="filtrarPorAutor('${autor.replace(/'/g, "\\'")}')"><span>${autor}</span> <small>(${qtd})</small></span>`;
     });
-    html += '</div><div id="livrosPorAutor" style="margin-top:20px;"></div>';
+    html += '</div>'; // Fechamos a planilha AQUI para isolar as colunas!
+    
+    // 3. Onde a tabela de livros vai aparecer (agora totalmente solta e ocupando 100% da largura)
+    html += '<div id="livrosPorAutor" style="margin-top:30px;"></div>';
+    
     container.innerHTML = html;
 }
 
@@ -232,19 +240,27 @@ function filtrarPorAutor(autor) {
 
 
 // ===== Página Instrumentos =====
+// ===== Página Instrumentos =====
 function renderizarInstrumentos() {
     const container = document.getElementById('instrumentos');
     const mapa = new Map();
     livros.forEach(l => mapa.set(l.instrumento, (mapa.get(l.instrumento) || 0) + 1));
     
-    // ORDENAÇÃO ALFABÉTICA: Compara o nome do instrumento [0] de A a Z
     const lista = Array.from(mapa.entries()).sort((a, b) => a[0].localeCompare(b[0]));
 
-    let html = '<h1>🎸 Instrumentos</h1><div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;">';
+    // 1. Criamos o título
+    let html = '<h1>🎸 Instrumentos</h1>';
+    
+    // 2. Abrimos a div que o CSS transforma em Planilha
+    html += '<div class="planilha-grid">';
     lista.forEach(([inst, qtd]) => {
         html += `<span class="list-item" onclick="filtrarPorInstrumento('${inst.replace(/'/g, "\\'")}')"><span>${inst}</span> <small>(${qtd})</small></span>`;
     });
-    html += '</div><div id="livrosPorInstrumento" style="margin-top:20px;"></div>';
+    html += '</div>'; // Fechamos a planilha AQUI!
+    
+    // 3. Espaço para a tabela expandida de livros
+    html += '<div id="livrosPorInstrumento" style="margin-top:30px;"></div>';
+    
     container.innerHTML = html;
 }
 
