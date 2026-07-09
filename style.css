@@ -136,6 +136,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     overflow-x: auto;
+    width: 100%;
 }
 
 table {
@@ -179,31 +180,71 @@ tr:hover td {
     background: #039be5;
 }
 
-/* ===== LISTA DE ITENS (Autores/Instrumentos) ===== */
+/* ===== LISTA DE ITENS (Autores/Instrumentos em Colunas Organizadas) ===== */
+#autores, #instrumentos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 12px;
+    margin-top: 15px;
+}
+
+#autores h1, #instrumentos h1 {
+    grid-column: 1 / -1;
+    margin-bottom: 10px;
+}
+
+#autores > div, #instrumentos > div {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
+    width: 100%;
+}
+
 .list-item {
-    display: inline-block;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background: #fff;
-    margin: 6px 8px 6px 0;
-    padding: 10px 18px;
-    border-radius: 30px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin: 0;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.2s ease;
+    border: 1px solid #eef2f7;
 }
 
 .list-item:hover {
     background: #e9edf2;
-    transform: scale(1.02);
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.08);
 }
 
 .list-item span {
-    font-weight: 600;
+    font-weight: 500;
     color: #1e2a3a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .list-item small {
-    color: #888;
-    margin-left: 6px;
+    background: #e9edf2;
+    color: #4a5568;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+#livrosPorAutor, #livrosPorInstrumento {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin-top: 25px;
 }
 
 /* ===== ESTATÍSTICAS ===== */
@@ -432,8 +473,8 @@ tr:hover td {
 }
 
 /* ============================================================
-   ===== RESPONSIVIDADE =====
-   ============================================================ */
+    ===== RESPONSIVIDADE =====
+    ============================================================ */
 @media (max-width: 768px) {
     .sidebar {
         width: 100%;
