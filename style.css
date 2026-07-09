@@ -182,7 +182,6 @@ tr:hover td {
 
 /* ===== LISTA DE ITENS (Autores/Instrumentos em formato de Planilha Automática) ===== */
 
-/* Container geral das páginas */
 #autores, #instrumentos {
     display: block;
     width: 100%;
@@ -193,47 +192,38 @@ tr:hover td {
     margin-bottom: 20px;
 }
 
-/* O container dos itens vira a "Planilha Automática" */
-#autores > div, #instrumentos > div {
+/* Esta classe controla estritamente a grade de autores/instrumentos */
+.planilha-grid {
     display: grid;
-    /* Define colunas automáticas: elas se ajustam sozinhas dependendo do tamanho da tela */
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    /* Remove qualquer espaçamento irregular e cria linhas/colunas perfeitas */
     gap: 0; 
     width: 100%;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     overflow: hidden;
-    /* Bordas externas da planilha */
     border-top: 1px solid #cbd5e1;
     border-left: 1px solid #cbd5e1;
 }
 
-/* Cada item vira uma "Célula" perfeita da planilha */
+/* Cada célula da planilha */
 .list-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: #fff;
-    margin: 0; /* Remove margens para grudar as células */
+    margin: 0;
     padding: 14px 20px;
     cursor: pointer;
     transition: background 0.2s ease;
-    /* Cria as linhas de divisão internas da planilha */
     border-bottom: 1px solid #cbd5e1;
     border-right: 1px solid #cbd5e1;
-    box-shadow: none; /* Remove a sombra individual estilo "card" */
-    border-radius: 0; /* Remove cantos arredondados individuais */
 }
 
-/* Efeito visual ao passar o mouse na célula */
 .list-item:hover {
     background: #f1f5f9;
-    transform: none; /* Remove o efeito de saltar para manter o estilo planilha */
 }
 
-/* Texto do Autor/Instrumento dentro da célula */
 .list-item span {
     font-weight: 500;
     color: #1e2a3a;
@@ -242,9 +232,8 @@ tr:hover td {
     text-overflow: ellipsis;
 }
 
-/* O número (quantidade) alinhado à direita na célula, imitando dados de planilha */
 .list-item small {
-    background: transparent; /* Remove o balão cinza */
+    background: transparent;
     color: #64748b;
     font-weight: bold;
     font-family: monospace;
@@ -253,7 +242,6 @@ tr:hover td {
     flex-shrink: 0;
 }
 
-/* Adiciona um "x" ou indicador discreto antes do número para separar */
 .list-item small::before {
     content: "qtd: ";
     font-size: 0.75rem;
@@ -261,10 +249,11 @@ tr:hover td {
     color: #94a3b8;
 }
 
-/* Container da tabela de livros que abre ao clicar */
+/* Garante que a tabela de livros debaixo tome 100% de largura, sem herdar as colunas do Grid */
 #livrosPorAutor, #livrosPorInstrumento {
+    display: block;
     width: 100%;
-    margin-top: 30px;
+    clear: both;
 }
 
 /* ============================================================
