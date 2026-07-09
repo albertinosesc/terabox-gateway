@@ -1,4 +1,4 @@
-// admin.js - Gerenciador Otimizado com campo Conta
+// admin.js - Gerenciador Otimizado com campo Conta e Relatórios Avançados
 
 // ===== Variáveis =====
 let livros = [];
@@ -61,10 +61,8 @@ function salvarLivro() {
         return;
     }
 
-    // Cria o objeto base do livro
     const novoLivro = { numero, tipo, instrumento, autor, titulo, arquivo };
 
-    // Se o usuário digitou uma letra de conta, adiciona o prefixo fixo
     if (letraConta) {
         novoLivro.conta = `CONTA_${letraConta}`;
     }
@@ -85,17 +83,16 @@ function salvarLivro() {
 
 // ===== Editar =====
 function editarLivro(idx) {
-    const livro = livros[idx];
-    document.getElementById('txtNumero').value = livro.numero;
-    document.getElementById('txtTipo').value = livro.tipo;
-    document.getElementById('txtInstrumento').value = livro.instrumento;
-    document.getElementById('txtAutor').value = livro.autor;
-    document.getElementById('txtTitulo').value = livro.titulo;
-    document.getElementById('txtArquivo').value = livro.arquivo;
+    const livre = livros[idx];
+    document.getElementById('txtNumero').value = livre.numero;
+    document.getElementById('txtTipo').value = livre.tipo;
+    document.getElementById('txtInstrumento').value = livre.instrumento;
+    document.getElementById('txtAutor').value = livre.autor;
+    document.getElementById('txtTitulo').value = livre.titulo;
+    document.getElementById('txtArquivo').value = livre.arquivo;
     
-    // Se o livro já tem uma conta configurada (ex: "CONTA_A"), extrai apenas a letra ("A")
-    if (livro.conta && livro.conta.startsWith('CONTA_')) {
-        document.getElementById('txtLetraConta').value = livro.conta.replace('CONTA_', '');
+    if (livre.conta && livre.conta.startsWith('CONTA_')) {
+        document.getElementById('txtLetraConta').value = livre.conta.replace('CONTA_', '');
     } else {
         document.getElementById('txtLetraConta').value = '';
     }
@@ -159,6 +156,30 @@ function exportarJSON() {
     alert(`📥 JSON exportado com ${livros.length} livros.`);
 }
 
+// ===== EXPORTAR LIVROS EM FORMATO LISTA TXT =====
+function exportarTXT() {
+    if (livros.length === 0) {
+        alert('❌ Nenhum livro para exportar.');
+        return;
+    }
+    let texto = '';
+    livros.forEach(l => {
+        let contaLetra = '';
+        if (l.conta && l.conta.startsWith('CONTA_')) {
+            contaLetra = " - " + l.conta.replace('CONTA_', '');
+        }
+        texto += `${l.numero} - ${l.tipo} - ${l.instrumento} - ${l.autor} - ${l.titulo}${contaLetra}\n`;
+    });
+
+    const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'lista_livros.txt';
+    link.click();
+    URL.revokeObjectURL(link.href);
+    alert(`📥 Lista TXT exportada com ${livros.length} livros.`);
+}
+
 // ===== APAGAR TODOS =====
 function apagarTodos() {
     if (livros.length === 0) {
@@ -183,10 +204,11 @@ function resetarDados() {
     alert('✅ Dados recarregados do arquivo original.');
 }
 
-// ===== Importação em lote =====
+// ===== Importação em lote com mapa visual coloridom =====
 function importarLote() {
     const textarea = document.getElementById('txtLote');
     const feedback = document.getElementById('feedbackLote');
+    const detalhesDiv = document.getElementById('detalhesImportacao');
     const linhas = textarea.value.split('\n').filter(line => line.trim() !== '');
     
     if (linhas.length === 0) {
@@ -197,12 +219,12 @@ function importarLote() {
 
     let importados = [];
     let ignorados = [];
+    let htmlFeedbackVisual = '<h4>🔍 Validação e Sinalização das Linhas:</h4>';
 
     linhas.forEach((linha) => {
         const linhaNormalizada = linha.replace(/[–—]/g, '-');
         const partes = linhaNormalizada.split(' - ').map(p => p.trim());
         
-        // Suporta os formatos normais de 5 partes ou o estendido de 6 partes (com a conta)
         if (partes.length >= 5) {
             const numero = partes[0];
             const tipo = partes[1];
@@ -211,10 +233,8 @@ function importarLote() {
             let titulo = partes[4];
             let letraConta = partes[5] ? partes[5].toUpperCase() : '';
 
-            // Caso o título contenha hífens acidentais e empurre a conta para frentes maiores
             if (partes.length > 6) {
                 letraConta = partes[partes.length - 1].toUpperCase();
-                // Reconstrói o título juntando o meio
                 titulo = partes.slice(4, partes.length - 1).join(' - ');
             }
 
@@ -224,18 +244,26 @@ function importarLote() {
             if (!existe) {
                 const itemLivro = { numero, tipo, instrumento, autor, titulo, arquivo };
                 
-                // Se a 6ª parte for apenas uma única letra ou código válido de conta
                 if (letraConta && letraConta.length <= 3) {
                     itemLivro.conta = `CONTA_${letraConta}`;
                 }
 
                 livros.push(itemLivro);
                 importados.push(itemLivro);
+                
+                // Div de Sucesso (Verde)
+                htmlFeedbackVisual += `<div class="linha-marcada sucesso">🔹 [OK] ${linha}</div>`;
             } else {
-                ignorados.push({ linha: linha, motivo: 'Número já existe' });
+                const motivo = 'Número identificador (ID) já cadastrado no sistema';
+                ignorados.push({ linha: linha, motivo: motivo });
+                // Div de Erro Duplicado (Vermelho)
+                htmlFeedbackVisual += `<div class="linha-marcada erro">❌ [REJEITADO: ${motivo}] ${linha}</div>`;
             }
         } else {
-            ignorados.push({ line: linha, motivo: 'Formato inválido (Mínimo de 5 campos)' });
+            const motivo = 'Formato estrutural inválido (Mínimo de 5 campos divididos por " - ")';
+            ignorados.push({ linha: linha, motivo: motivo });
+            // Div de Erro Estrutura (Vermelho)
+            htmlFeedbackVisual += `<div class="linha-marcada erro">❌ [REJEITADO: ${motivo}] ${linha}</div>`;
         }
     });
 
@@ -249,62 +277,64 @@ function importarLote() {
         mensagem += `✅ ${importados.length} livro(s) importado(s). `;
     }
     if (ignorados.length > 0) {
-        mensagem += `⚠️ ${ignorados.length} linha(s) ignoradas.`;
+        mensagem += `⚠️ ${ignorados.length} linha(s) ignorada(s).`;
     }
 
     feedback.className = 'feedback success';
     feedback.innerHTML = mensagem;
 
-    const detalhesDiv = document.getElementById('detalhesImportacao');
-    if (ignorados.length > 0) {
-        let html = '<h4>Linhas ignoradas:</h4><ul>';
-        ignorados.forEach(item => {
-            html += `<li><strong>${item.linha}</strong> — ${item.motivo}</li>`;
-        });
-        html += '</ul>';
-        detalhesDiv.innerHTML = html;
-        detalhesDiv.style.display = 'block';
-    } else {
-        detalhesDiv.innerHTML = '';
-        detalhesDiv.style.display = 'none';
-    }
+    // Alimenta a caixa de exibição visual colorida abaixo do textarea
+    detalhesDiv.innerHTML = htmlFeedbackVisual;
+    detalhesDiv.style.display = 'block';
 
     document.getElementById('btnBaixarRelatorio').style.display = 'inline-block';
 }
 
-// ===== Baixar relatório em TXT =====
+// ===== Baixar relatório de erros em TXT =====
 function baixarRelatorio() {
     if (ultimoImportados.length === 0 && ultimoIgnorados.length === 0) {
         alert('ℹ️ Nenhuma importação recente para gerar relatório.');
         return;
     }
-    let texto = '=== RELATÓRIO DE IMPORTAÇÃO ===\n\n';
-    texto += `Data: ${new Date().toLocaleString()}\n\n`;
+    let texto = '=========================================\n';
+    texto += '   RELATÓRIO DE IMPORTAÇÃO DETALHADO\n';
+    texto += '=========================================\n';
+    texto += `Gerado em: ${new Date().toLocaleString()}\n\n`;
 
-    if (ultimoImportados.length > 0) {
-        texto += `📥 LIVROS IMPORTADOS (${ultimoImportados.length}):\n`;
-        texto += 'Número - Tipo - Instrumento - Autor - Título - Conta\n';
-        ultimoImportados.forEach(l => {
-            texto += `${l.numero} - ${l.tipo} - ${l.instrumento} - ${l.autor} - ${l.titulo} - ${l.conta || 'PADRAO'}\n`;
-        });
-        texto += '\n';
-    }
+    texto += `📊 RESUMO DE EXECUÇÃO:\n`;
+    texto += `   - Importações bem-sucedidas: ${ultimoImportados.length}\n`;
+    texto += `   - Registros rejeitados/ignorados: ${ultimoIgnorados.length}\n`;
+    texto += `   - Total de linhas processadas: ${ultimoImportados.length + ultimoIgnorados.length}\n\n`;
 
-    if (ultimoIgnorados.length > 0) {
-        texto += `⚠️ LINHAS IGNORADAS (${ultimoIgnorados.length}):\n`;
-        ultimoIgnorados.forEach(item => {
-            texto += `- ${item.linha} (Motivo: ${item.motivo})\n`;
+    texto += '-----------------------------------------\n';
+    texto += `⚠️ LINHAS DETALHADAS QUE FORAM REJEITADAS (${ultimoIgnorados.length})\n`;
+    texto += '-----------------------------------------\n';
+    if (ultimoIgnorados.length === 0) {
+        texto += 'Nenhum erro ou arquivo rejeitado nesta rodada.\n';
+    } else {
+        ultimoIgnorados.forEach((item, idx) => {
+            texto += `[OCORRÊNCIA REJEITADA #${idx + 1}]\n`;
+            texto += `Linha enviada: ${item.linha}\n`;
+            texto += `Motivo do descarte: ${item.motivo}\n`;
+            texto += `-----------------------------------------\n`;
         });
-        texto += '\n';
     }
+    texto += '\n';
+
+    texto += '-----------------------------------------\n';
+    texto += `📥 ARQUIVOS INSERIDOS COM SUCESSO (${ultimoImportados.length})\n`;
+    texto += '-----------------------------------------\n';
+    ultimoImportados.forEach(l => {
+        texto += `Nº: ${l.numero} | Tipo: ${l.tipo} | Instrumento: ${l.instrumento} | Autor: ${l.autor} | Título: ${l.titulo} | Conta: ${l.conta || 'PADRAO'}\n`;
+    });
 
     const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'relatorio_importacao.txt';
+    link.download = 'relatorio_importacao_detalhado.txt';
     link.click();
     URL.revokeObjectURL(link.href);
-    alert('📄 Relatório baixado com sucesso.');
+    alert('📄 Relatório completo gravado e baixado como TXT.');
 }
 
 // ===== ATUALIZAÇÃO AUTOMÁTICA DO CAMPO ARQUIVO =====
@@ -316,17 +346,15 @@ function atualizarArquivoAutomatico() {
     }
 }
 
-// ===== Inicialização =====
+// ===== Inicialização Geral =====
 document.addEventListener('DOMContentLoaded', () => {
     carregarDados();
-
     window.arquivoModificado = false;
 
     const txtNumero = document.getElementById('txtNumero');
     const txtArquivo = document.getElementById('txtArquivo');
 
     txtNumero.addEventListener('input', atualizarArquivoAutomatico);
-
     txtArquivo.addEventListener('input', () => {
         window.arquivoModificado = true;
     });
@@ -336,12 +364,14 @@ document.addEventListener('DOMContentLoaded', () => {
         limparFormulario();
     });
 
-    // Eventos dos botões
+    // Mapeamento dos eventos dos botões administrativos
     document.getElementById('btnSalvar').addEventListener('click', salvarLivro);
     document.getElementById('btnExportar').addEventListener('click', exportarJSON);
+    document.getElementById('btnExportarTXT').addEventListener('click', exportarTXT);
     document.getElementById('btnApagarTodos').addEventListener('click', apagarTodos);
     document.getElementById('btnResetar').addEventListener('click', resetarDados);
     document.getElementById('btnImportarLote').addEventListener('click', importarLote);
+    
     document.getElementById('btnLimparLote').addEventListener('click', () => {
         document.getElementById('txtLote').value = '';
         document.getElementById('feedbackLote').className = 'feedback';
@@ -352,5 +382,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ultimoImportados = [];
         ultimoIgnorados = [];
     });
+    
     document.getElementById('btnBaixarRelatorio').addEventListener('click', baixarRelatorio);
 });
