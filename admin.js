@@ -1,4 +1,148 @@
-// admin.js - Gerenciador Otimizado com campo Conta e Relatórios Avançados
+// ============================================================
+// ===== SISTEMA DE EXPORTAÇÃO DE TRÊS FORMATOS =====
+// ============================================================
+
+// 1º FORMATO: Arquivo .json puro estruturado
+function exportarJSONNativo() {
+    if (livros.length === 0) {
+        alert('❌ Nenhum livro para exportar.');
+        return;
+    }
+    let json = '[\n';
+    livros.forEach((livro, index) => {
+        json += "  " + JSON.stringify(livro);
+        if (index < livros.length - 1) {
+            json += ',\n';
+        } else {
+            json += '\n';
+        }
+    });
+    json += ']';
+    
+    const blob = new Blob([json], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'livros.json';
+    link.click();
+    URL.revokeObjectURL(link.href);
+    alert(`📥 JSON Nativo (.json) exportado com ${livros.length} livros.`);
+}
+
+// 2º FORMATO: Arquivo .txt limpo separado por hífens
+function exportarTXTPadrao() {
+    if (livros.length === 0) {
+        alert('❌ Nenhum livro para exportar.');
+        return;
+    }
+    let texto = '';
+    livros.forEach(l => {
+        let contaLetra = '';
+        if (l.conta && l.conta.startsWith('CONTA_')) {
+            contaLetra = " - " + l.conta.replace('CONTA_', '');
+        }
+        texto += `${l.numero} - ${l.tipo} - ${l.instrumento} - ${l.autor} - ${l.titulo}${contaLetra}\n`;
+    });
+
+    const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'lista_livros_padrao.txt';
+    link.click();
+    URL.revokeObjectURL(link.href);
+    alert(`📥 Lista TXT Padrão (.txt) exportada com ${livros.length} livros.`);
+}
+
+// 3º FORMATO: Arquivo .txt contendo a estrutura de texto em bloco JSON
+function exportarTXTFormatoJson() {
+    if (livros.length === 0) {
+        alert('❌ Nenhum livro para exportar.');
+        return;
+    }
+    let textoJson = '[\n';
+    livros.forEach((livro, index) => {
+        textoJson += "  " + JSON.stringify(livro);
+        if (index < livros.length - 1) {
+            textoJson += ',\n';
+        } else {
+            textoJson += '\n';
+        }
+    });
+    textoJson += ']';
+
+    const blob = new Blob([textoJson], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'backup_estrutura_json.txt';
+    link.click();
+    URL.revokeObjectURL(link.href);
+    alert(`📥 Texto em formato JSON (.txt) exportado com ${livros.length} livros.`);
+}
+
+// ===== Outras funções administrativas mantidas =====
+function apagarTodos() {
+    if (livros.length === 0) {
+        alert('ℹ️ A lista já está vazia.');
+        return;
+    }
+    if (confirm(`⚠️ Tem certeza que deseja EXCLUIR TODOS os ${livros.length} livros?\nEsta ação não pode ser desfeita.`)) {
+        livros = [];
+        renderizarTabelaAdmin();
+        alert('🗑️ Todos os livros foram removidos da lista.');
+    }
+}
+
+function resetarDados() {
+    if (livros.length === 0) {
+        if (!confirm('⚠️ A lista está vazia. Deseja recarregar os dados originais?')) return;
+    } else {
+        if (!confirm('⚠️ Isso vai recarregar os dados originais do arquivo dados.js.\nTodas as alterações não salvas serão perdidas.\nContinuar?')) return;
+    }
+    carregarDados();
+    alert('✅ Dados recarregados do arquivo original.');
+}
+
+// ===== Inicialização Geral Atualizada com os 3 Eventos =====
+document.addEventListener('DOMContentLoaded', () => {
+    carregarDados();
+    window.arquivoModificado = false;
+
+    const txtNumero = document.getElementById('txtNumero');
+    const txtArquivo = document.getElementById('txtArquivo');
+
+    txtNumero.addEventListener('input', atualizarArquivoAutomatico);
+    txtArquivo.addEventListener('input', () => {
+        window.arquivoModificado = true;
+    });
+
+    document.getElementById('btnLimpar').addEventListener('click', () => {
+        window.arquivoModificado = false;
+        limparFormulario();
+    });
+
+    // Mapeamento dos botões salvadores e restauradores
+    document.getElementById('btnSalvar').addEventListener('click', salvarLivro);
+    document.getElementById('btnApagarTodos').addEventListener('click', apagarTodos);
+    document.getElementById('btnResetar').addEventListener('click', resetarDados);
+    document.getElementById('btnImportarLote').addEventListener('click', importarLote);
+    
+    // ATRIBUIÇÃO DOS EVENTOS AOS 3 NOVOS BOTÕES DE SAÍDA
+    document.getElementById('btnExportarJSON').addEventListener('click', exportarJSONNativo);
+    document.getElementById('btnExportarTXTPadrao').addEventListener('click', exportarTXTPadrao);
+    document.getElementById('btnExportarTXTJson').addEventListener('click', exportarTXTFormatoJson);
+    
+    document.getElementById('btnLimparLote').addEventListener('click', () => {
+        document.getElementById('txtLote').value = '';
+        document.getElementById('feedbackLote').className = 'feedback';
+        document.getElementById('feedbackLote').textContent = '';
+        document.getElementById('detalhesImportacao').innerHTML = '';
+        document.getElementById('detalhesImportacao').style.display = 'none';
+        document.getElementById('btnBaixarRelatorio').style.display = 'none';
+        ultimoImportados = [];
+        ultimoIgnorados = [];
+    });
+    
+    document.getElementById('btnBaixarRelatorio').addEventListener('click', baixarRelatorio);
+});// admin.js - Gerenciador Otimizado com campo Conta e Relatórios Avançados
 
 // ===== Variáveis =====
 let livros = [];
@@ -83,16 +227,16 @@ function salvarLivro() {
 
 // ===== Editar =====
 function editarLivro(idx) {
-    const livre = livros[idx];
-    document.getElementById('txtNumero').value = livre.numero;
-    document.getElementById('txtTipo').value = livre.tipo;
-    document.getElementById('txtInstrumento').value = livre.instrumento;
-    document.getElementById('txtAutor').value = livre.autor;
-    document.getElementById('txtTitulo').value = livre.titulo;
-    document.getElementById('txtArquivo').value = livre.arquivo;
+    const livro = livros[idx];
+    document.getElementById('txtNumero').value = livro.numero;
+    document.getElementById('txtTipo').value = livro.tipo;
+    document.getElementById('txtInstrumento').value = livro.instrumento;
+    document.getElementById('txtAutor').value = livro.autor;
+    document.getElementById('txtTitulo').value = livro.titulo;
+    document.getElementById('txtArquivo').value = livro.arquivo;
     
-    if (livre.conta && livre.conta.startsWith('CONTA_')) {
-        document.getElementById('txtLetraConta').value = livre.conta.replace('CONTA_', '');
+    if (livro.conta && livro.conta.startsWith('CONTA_')) {
+        document.getElementById('txtLetraConta').value = livro.conta.replace('CONTA_', '');
     } else {
         document.getElementById('txtLetraConta').value = '';
     }
@@ -131,8 +275,12 @@ function limparFormulario() {
     window.arquivoModificado = false;
 }
 
-// ===== EXPORTAR JSON =====
-function exportarJSON() {
+// ============================================================
+// ===== SISTEMA DE EXPORTAÇÃO DE TRÊS FORMATOS =====
+// ============================================================
+
+// 1º FORMATO: Arquivo .json puro estruturado
+function exportarJSONNativo() {
     if (livros.length === 0) {
         alert('❌ Nenhum livro para exportar.');
         return;
@@ -147,17 +295,18 @@ function exportarJSON() {
         }
     });
     json += ']';
+    
     const blob = new Blob([json], { type: 'application/json' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = 'livros.json';
     link.click();
     URL.revokeObjectURL(link.href);
-    alert(`📥 JSON exportado com ${livros.length} livros.`);
+    alert(`📥 JSON Nativo (.json) exportado com ${livros.length} livros.`);
 }
 
-// ===== EXPORTAR LIVROS EM FORMATO LISTA TXT =====
-function exportarTXT() {
+// 2º FORMATO: Arquivo .txt limpo separado por hífens
+function exportarTXTPadrao() {
     if (livros.length === 0) {
         alert('❌ Nenhum livro para exportar.');
         return;
@@ -174,13 +323,39 @@ function exportarTXT() {
     const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'lista_livros.txt';
+    link.download = 'lista_livros_padrao.txt';
     link.click();
     URL.revokeObjectURL(link.href);
-    alert(`📥 Lista TXT exportada com ${livros.length} livros.`);
+    alert(`📥 Lista TXT Padrão (.txt) exportada com ${livros.length} livros.`);
 }
 
-// ===== APAGAR TODOS =====
+// 3º FORMATO: Arquivo .txt contendo a estrutura de texto em bloco JSON
+function exportarTXTFormatoJson() {
+    if (livros.length === 0) {
+        alert('❌ Nenhum livro para exportar.');
+        return;
+    }
+    let textoJson = '[\n';
+    livros.forEach((livro, index) => {
+        textoJson += "  " + JSON.stringify(livro);
+        if (index < livros.length - 1) {
+            textoJson += ',\n';
+        } else {
+            textoJson += '\n';
+        }
+    });
+    textoJson += ']';
+
+    const blob = new Blob([textoJson], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'backup_estrutura_json.txt';
+    link.click();
+    URL.revokeObjectURL(link.href);
+    alert(`📥 Texto em formato JSON (.txt) exportado com ${livros.length} livros.`);
+}
+
+// ===== Apagar todos e Resetar originais =====
 function apagarTodos() {
     if (livros.length === 0) {
         alert('ℹ️ A lista já está vazia.');
@@ -193,7 +368,7 @@ function apagarTodos() {
     }
 }
 
-// ===== RESETAR DADOS =====
+// ===== Resetar para dados.js =====
 function resetarDados() {
     if (livros.length === 0) {
         if (!confirm('⚠️ A lista está vazia. Deseja recarregar os dados originais?')) return;
@@ -251,18 +426,15 @@ function importarLote() {
                 livros.push(itemLivro);
                 importados.push(itemLivro);
                 
-                // Div de Sucesso (Verde)
                 htmlFeedbackVisual += `<div class="linha-marcada sucesso">🔹 [OK] ${linha}</div>`;
             } else {
                 const motivo = 'Número identificador (ID) já cadastrado no sistema';
                 ignorados.push({ linha: linha, motivo: motivo });
-                // Div de Erro Duplicado (Vermelho)
                 htmlFeedbackVisual += `<div class="linha-marcada erro">❌ [REJEITADO: ${motivo}] ${linha}</div>`;
             }
         } else {
             const motivo = 'Formato estrutural inválido (Mínimo de 5 campos divididos por " - ")';
             ignorados.push({ linha: linha, motivo: motivo });
-            // Div de Erro Estrutura (Vermelho)
             htmlFeedbackVisual += `<div class="linha-marcada erro">❌ [REJEITADO: ${motivo}] ${linha}</div>`;
         }
     });
@@ -283,7 +455,6 @@ function importarLote() {
     feedback.className = 'feedback success';
     feedback.innerHTML = mensagem;
 
-    // Alimenta a caixa de exibição visual colorida abaixo do textarea
     detalhesDiv.innerHTML = htmlFeedbackVisual;
     detalhesDiv.style.display = 'block';
 
@@ -364,13 +535,15 @@ document.addEventListener('DOMContentLoaded', () => {
         limparFormulario();
     });
 
-    // Mapeamento dos eventos dos botões administrativos
     document.getElementById('btnSalvar').addEventListener('click', salvarLivro);
-    document.getElementById('btnExportar').addEventListener('click', exportarJSON);
-    document.getElementById('btnExportarTXT').addEventListener('click', exportarTXT);
     document.getElementById('btnApagarTodos').addEventListener('click', apagarTodos);
     document.getElementById('btnResetar').addEventListener('click', resetarDados);
     document.getElementById('btnImportarLote').addEventListener('click', importarLote);
+    
+    // Vinculação dos 3 novos botões de saída
+    document.getElementById('btnExportarJSON').addEventListener('click', exportarJSONNativo);
+    document.getElementById('btnExportarTXTPadrao').addEventListener('click', exportarTXTPadrao);
+    document.getElementById('btnExportarTXTJson').addEventListener('click', exportarTXTFormatoJson);
     
     document.getElementById('btnLimparLote').addEventListener('click', () => {
         document.getElementById('txtLote').value = '';
