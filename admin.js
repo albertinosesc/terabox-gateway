@@ -1,10 +1,14 @@
-// admin.js - Gerenciador Avançado com Destaque no Campo e Três Exportações
+// admin.js - Gerenciador Avançado com Destaque no Campo, Navegação de Erros e Três Exportações
 
-// ===== Variáveis =====
+// ===== Variáveis Globais =====
 let livros = [];
 let indiceEditando = -1;
 let ultimoImportados = [];
 let ultimoIgnorados = [];
+
+// Variáveis de controle para a navegação de erros no lote
+let errosEncontrados = [];
+let indiceErroAtual = -1;
 
 // ===== Carregar dados do dados.js (global) =====
 function carregarDados() {
@@ -166,22 +170,68 @@ function validarLoteNoCampo() {
 
             if (!existe) {
                 // Linha Correta -> Destaque Verde Seguro
-                novoConteudoHTML += `<div style="background: #e2f0d9; color: #385723; padding: 4px 8px; margin: 3px 0; border-radius: 4px; font-family: monospace;">🔹 [OK] ${linhaLimpa}</div>`;
+                novoConteudoHTML += `<div class="linha-valida" style="background: #e2f0d9; color: #385723; padding: 4px 8px; margin: 3px 0; border-radius: 4px; font-family: monospace;">🔹 [OK] ${linhaLimpa}</div>`;
             } else {
                 // Linha com ID Duplicado -> Destaque Vermelho/Laranja
                 contagemErros++;
-                novoConteudoHTML += `<div style="background: #fce4d6; color: #c65911; padding: 4px 8px; margin: 3px 0; border-radius: 4px; font-family: monospace;">❌ [REJEITADO: ID Já Existe] ${linhaLimpa}</div>`;
+                novoConteudoHTML += `<div class="linha-com-erro" style="background: #fce4d6; color: #c65911; padding: 4px 8px; margin: 3px 0; border-radius: 4px; font-family: monospace;">❌ [REJEITADO: ID Já Existe] ${linhaLimpa}</div>`;
             }
         } else {
             // Linha sem os 5 campos -> Destaque Amarelo Alerta
             contagemErros++;
-            novoConteudoHTML += `<div style="background: #fff2cc; color: #b25900; padding: 4px 8px; margin: 3px 0; border-radius: 4px; font-family: monospace;">❌ [REJEITADO: Estrutura Incompleta] ${linhaLimpa}</div>`;
+            novoConteudoHTML += `<div class="linha-com-erro" style="background: #fff2cc; color: #b25900; padding: 4px 8px; margin: 3px 0; border-radius: 4px; font-family: monospace;">❌ [REJEITADO: Estrutura Incompleta] ${linhaLimpa}</div>`;
         }
     });
 
     campo.innerHTML = novoConteudoHTML;
-    feedback.className = contagemErros > 0 ? 'feedback error' : 'feedback success';
-    feedback.textContent = contagemErros > 0 ? `⚠️ Análise concluída: detectadas ${contagemErros} falhas. Corrija-as diretamente no campo acima antes de importar.` : `✅ Tudo pronto! Todas as linhas estão corretas para a inclusão.`;
+    
+    // Atualiza o mapeamento dinâmico de elementos com erro na tela
+    errosEncontrados = Array.from(campo.getElementsByClassName('linha-com-erro'));
+    indiceErroAtual = -1; // Reseta a posição do cursor de navegação
+
+    const btnAnt = document.getElementById('btnErroAnterior');
+    const btnProx = document.getElementById('btnProximoErro');
+
+    if (contagemErros > 0) {
+        feedback.className = 'feedback error';
+        feedback.textContent = `⚠️ Análise concluída: detectadas ${contagemErros} falhas. Use os botões Anterior/Próximo para navegar e corrigi-as direto no campo.`;
+        btnAnt.disabled = false;
+        btnProx.disabled = false;
+    } else {
+        feedback.className = 'feedback success';
+        feedback.textContent = `✅ Tudo pronto! Todas as linhas estão corretas para a inclusão.`;
+        btnAnt.disabled = true;
+        btnProx.disabled = true;
+    }
+}
+
+// ===== SISTEMA DE NAVEGAÇÃO SEQUENCIAL ENTRE ERROS =====
+function irParaErro(direcao) {
+    if (errosEncontrados.length === 0) return;
+
+    // Limpa destaque de focos prévios nas bordas
+    errosEncontrados.forEach(el => el.style.outline = 'none');
+
+    if (direcao === 'proximo') {
+        indiceErroAtual++;
+        if (indiceErroAtual >= errosEncontrados.length) {
+            indiceErroAtual = 0; // Dá a volta para o primeiro
+        }
+    } else if (direcao === 'anterior') {
+        indiceErroAtual--;
+        if (indiceErroAtual < 0) {
+            indiceErroAtual = errosEncontrados.length - 1; // Salta para o último registro
+        }
+    }
+
+    const erroFocado = errosEncontrados[indiceErroAtual];
+    if (erroFocado) {
+        // Aplica contorno azul forte visível
+        erroFocado.style.outline = '2px solid #2196F3';
+        
+        // Desloca a barra de rolagem da DIV de forma responsiva até o erro
+        erroFocado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 }
 
 // ===== IMPORTAÇÃO DO LOTE =====
@@ -217,7 +267,7 @@ function importarLote() {
             let letraConta = partes[5] ? partes[5].toUpperCase() : '';
 
             if (partes.length > 6) {
-                letraConta =             partes[partes.length - 1].toUpperCase();
+                letraConta = partes[partes.length - 1].toUpperCase();
                 titulo = partes.slice(4, partes.length - 1).join(' - ');
             }
 
@@ -398,22 +448,33 @@ document.addEventListener('DOMContentLoaded', () => {
         limparFormulario();
     });
 
-    // Eventos de Inclusão e Lote
+    // Eventos de Inclusão, Validação e Lote
     document.getElementById('btnSalvar').addEventListener('click', salvarLivro);
     document.getElementById('btnValidarLote').addEventListener('click', validarLoteNoCampo);
     document.getElementById('btnImportarLote').addEventListener('click', importarLote);
     document.getElementById('btnBaixarRelatorio').addEventListener('click', baixarRelatorio);
+    
+    // Vinculação dos novos botões de navegação sequencial de erros
+    document.getElementById('btnProximoErro').addEventListener('click', () => irParaErro('proximo'));
+    document.getElementById('btnErroAnterior').addEventListener('click', () => irParaErro('anterior'));
     
     document.getElementById('btnLimparLote').addEventListener('click', () => {
         document.getElementById('txtLote').innerHTML = '';
         document.getElementById('feedbackLote').className = 'feedback';
         document.getElementById('feedbackLote').textContent = '';
         document.getElementById('btnBaixarRelatorio').style.display = 'none';
+        
+        // Desativa e reseta seletores de erro ao limpar
+        document.getElementById('btnErroAnterior').disabled = true;
+        document.getElementById('btnProximoErro').disabled = true;
+        errosEncontrados = [];
+        indiceErroAtual = -1;
+        
         ultimoImportados = [];
         ultimoIgnorados = [];
     });
 
-    // Eventos de Exportações Tríplices e Manutenção
+    // Eventos de Exportações Tríplices e Manutenção da Base
     document.getElementById('btnExportarJSON').addEventListener('click', exportarJSONNativo);
     document.getElementById('btnExportarTXTPadrao').addEventListener('click', exportarTXTPadrao);
     document.getElementById('btnExportarTXTJson').addEventListener('click', exportarTXTFormatoJson);
