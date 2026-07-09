@@ -180,48 +180,60 @@ tr:hover td {
     background: #039be5;
 }
 
-/* ===== LISTA DE ITENS (Autores/Instrumentos em Colunas Organizadas) ===== */
+/* ===== LISTA DE ITENS (Autores/Instrumentos em formato de Planilha Automática) ===== */
+
+/* Container geral das páginas */
 #autores, #instrumentos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 12px;
+    display: block;
+    width: 100%;
     margin-top: 15px;
 }
 
 #autores h1, #instrumentos h1 {
-    grid-column: 1 / -1;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
+/* O container dos itens vira a "Planilha Automática" */
 #autores > div, #instrumentos > div {
-    grid-column: 1 / -1;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 10px;
+    /* Define colunas automáticas: elas se ajustam sozinhas dependendo do tamanho da tela */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* Remove qualquer espaçamento irregular e cria linhas/colunas perfeitas */
+    gap: 0; 
     width: 100%;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    overflow: hidden;
+    /* Bordas externas da planilha */
+    border-top: 1px solid #cbd5e1;
+    border-left: 1px solid #cbd5e1;
 }
 
+/* Cada item vira uma "Célula" perfeita da planilha */
 .list-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: #fff;
-    margin: 0;
-    padding: 12px 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    margin: 0; /* Remove margens para grudar as células */
+    padding: 14px 20px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    border: 1px solid #eef2f7;
+    transition: background 0.2s ease;
+    /* Cria as linhas de divisão internas da planilha */
+    border-bottom: 1px solid #cbd5e1;
+    border-right: 1px solid #cbd5e1;
+    box-shadow: none; /* Remove a sombra individual estilo "card" */
+    border-radius: 0; /* Remove cantos arredondados individuais */
 }
 
+/* Efeito visual ao passar o mouse na célula */
 .list-item:hover {
-    background: #e9edf2;
-    border-color: #cbd5e1;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+    background: #f1f5f9;
+    transform: none; /* Remove o efeito de saltar para manter o estilo planilha */
 }
 
+/* Texto do Autor/Instrumento dentro da célula */
 .list-item span {
     font-weight: 500;
     color: #1e2a3a;
@@ -230,55 +242,29 @@ tr:hover td {
     text-overflow: ellipsis;
 }
 
+/* O número (quantidade) alinhado à direita na célula, imitando dados de planilha */
 .list-item small {
-    background: #e9edf2;
-    color: #4a5568;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
+    background: transparent; /* Remove o balão cinza */
+    color: #64748b;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 0.95rem;
     margin-left: 10px;
     flex-shrink: 0;
 }
 
+/* Adiciona um "x" ou indicador discreto antes do número para separar */
+.list-item small::before {
+    content: "qtd: ";
+    font-size: 0.75rem;
+    font-weight: normal;
+    color: #94a3b8;
+}
+
+/* Container da tabela de livros que abre ao clicar */
 #livrosPorAutor, #livrosPorInstrumento {
-    grid-column: 1 / -1;
     width: 100%;
-    margin-top: 25px;
-}
-
-/* ===== ESTATÍSTICAS ===== */
-.stat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.stat-card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 18px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-}
-
-.stat-card h4 {
-    color: #1e2a3a;
-    border-bottom: 2px solid #e9edf2;
-    padding-bottom: 8px;
-    margin-bottom: 12px;
-}
-
-.stat-card ul {
-    list-style: none;
-    padding: 0;
-}
-
-.stat-card li {
-    padding: 4px 0;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #f0f2f5;
+    margin-top: 30px;
 }
 
 /* ============================================================
