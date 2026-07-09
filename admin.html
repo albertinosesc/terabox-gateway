@@ -50,7 +50,7 @@
         }
         .feedback.success { background: #d4edda; color: #155724; display: block; }
         .feedback.error { background: #f8d7da; color: #721c24; display: block; }
-        
+                
         /* Container especial para o prefixo CONTA_ fixo */
         .input-conta-container {
             display: flex;
@@ -73,6 +73,18 @@
             padding-left: 4px !important;
             text-transform: uppercase;
         }
+
+        /* Estilos para a sinalização visual de linhas do lote */
+        .linha-marcada {
+            padding: 6px 10px;
+            margin: 4px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+        .linha-marcada.sucesso { background: #e2f0d9; color: #385723; border-left: 5px solid #70ad47; }
+        .linha-marcada.erro { background: #fce4d6; color: #c65911; border-left: 5px solid #ffc000; }
     </style>
 </head>
 <body>
@@ -84,7 +96,7 @@
     <div class="main">
         <div class="admin-panel">
             <h1>⚙️ Gerenciar Livros</h1>
-
+            
             <div class="import-section">
                 <h3>📥 Importar em Lote</h3>
                 <p>Cole abaixo os livros no formato: <strong>Número - Tipo - Instrumento - Autor - Título - Letra da Conta (Opcional)</strong></p>
@@ -93,12 +105,12 @@
                 <div class="btn-group">
                     <button id="btnImportarLote" class="btn-import-lote">📥 Importar Lote</button>
                     <button id="btnLimparLote" class="btn-clear">🧹 Limpar</button>
-                    <button id="btnBaixarRelatorio" class="btn-import" style="display:none;">📄 Baixar Relatório TXT</button>
+                    <button id="btnBaixarRelatorio" class="btn-import" style="display:none;">📄 Baixar Relatório Erros/Acertos</button>
                 </div>
                 <div id="feedbackLote" class="feedback"></div>
-                <div id="detalhesImportacao" style="margin-top:10px; background:#fff; padding:10px; border-radius:6px; border:1px solid #e9edf2; display:none;"></div>
+                <div id="detalhesImportacao" style="margin-top:15px; background:#fff; padding:12px; border-radius:6px; border:1px solid #e9edf2; display:none;"></div>
             </div>
-
+            
             <form id="formLivro">
                 <label>Número *</label>
                 <input type="text" id="txtNumero" placeholder="Ex: 6945" required>
@@ -110,7 +122,7 @@
                 <input type="text" id="txtAutor" placeholder="Nome do autor" required>
                 <label>Título *</label>
                 <input type="text" id="txtTitulo" placeholder="Título do livro" required>
-                
+                                
                 <label>Letra da Conta do Google Drive (Opcional)</label>
                 <div class="input-conta-container">
                     <span>CONTA_</span>
@@ -120,15 +132,16 @@
                 <label>Arquivo PDF</label>
                 <input type="text" id="txtArquivo" placeholder="pdf/6945.pdf">
             </form>
-
+            
             <div class="btn-group" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; margin-bottom:20px;">
                 <button type="button" id="btnSalvar" class="btn-save">💾 Salvar</button>
                 <button type="button" id="btnLimpar" class="btn-clear">🧹 Limpar</button>
                 <button type="button" id="btnExportar" class="btn-export">📤 Exportar JSON</button>
+                <button type="button" id="btnExportarTXT" class="btn-export" style="background:#673ab7; color:#fff;">📄 Exportar Lista TXT</button>
                 <button type="button" id="btnApagarTodos" class="btn-delete" style="background:#d32f2f;">🗑️ Apagar Todos</button>
                 <button type="button" id="btnResetar" class="btn-clear" style="background:#ff9800; color:#fff;">🔄 Resetar Dados</button>
             </div>
-            
+                        
             <div class="table-container">
                 <table>
                     <thead>
@@ -143,7 +156,6 @@
             </div>
         </div>
     </div>
-
     <script src="dados.js"></script>
     <script src="admin.js"></script>
 </body>
