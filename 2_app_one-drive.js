@@ -9,11 +9,8 @@ let instrumentoSelecionado = null;
 // ============================================================
 // CONFIGURAÇÃO DO ONEDRIVE
 // ============================================================
-// Link base da sua pasta de PDFs no OneDrive institucional
 const LINK_PASTA_ONEDRIVE = "https://sescba-my.sharepoint.com/personal/ba7918_sescbahia_com_br/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fba7918%5Fsescbahia%5Fcom%5Fbr%2FDocuments%2FNBM%2Fpdf&ga=1";
 
-// ===== Abrir PDF com busca automatizada dentro do OneDrive =====
-// ===== Abrir PDF direcionando para o visualizador direto do OneDrive Sesc =====
 // ===== Função auxiliar para calcular o nome da pasta com base no número =====
 function obterPastaFaixa(numero) {
     const num = parseInt(numero, 10);
@@ -37,10 +34,10 @@ function abrirPDF(caminho) {
     const nomeArquivo = caminho.split('/').pop();
 
     // 2. Descobre a subpasta correspondente (ex: "2000-2999")
-    const numeroApenas = nomeArquivo.replace(/\D/g, ''); // extrai apenas os dígitos
+    const numeroApenas = nomeArquivo.replace(/\D/g, ''); 
     const subpasta = obterPastaFaixa(numeroApenas);
 
-    // 3. Monta o caminho relativo da pasta pai (ex: NBM/pdf ou NBM/pdf/2000-2999)
+    // 3. Monta o caminho relativo da pasta pai
     const caminhoBase = '%2Fpersonal%2Fba7918%5Fsescbahia%5Fcom%5Fbr%2FDocuments%2FNBM%2Fpdf';
     const caminhoPastaPai = subpasta ? `${caminhoBase}%2F${encodeURIComponent(subpasta)}` : caminhoBase;
 
@@ -216,8 +213,6 @@ function exportarTXT() {
     URL.revokeObjectURL(link.href);
 }
 
-
-// ===== Página Autores =====
 // ===== Página Autores =====
 function renderizarAutores() {
     const container = document.getElementById('autores');
@@ -225,17 +220,12 @@ function renderizarAutores() {
     livros.forEach(l => mapa.set(l.autor, (mapa.get(l.autor) || 0) + 1));
     const lista = Array.from(mapa.entries()).sort((a, b) => a[0].localeCompare(b[0]));
 
-    // Criamos o título da página
     let html = '<h1>✍️ Autores</h1>';
-    
-    // CRIAMOS UMA DIV EXCLUSIVA PARA A PLANILHA DE COLUNAS
     html += '<div class="planilha-grid">';
     lista.forEach(([autor, qtd]) => {
         html += `<span class="list-item" onclick="filtrarPorAutor('${autor.replace(/'/g, "\\'")}')"><span>${autor}</span> <small>(${qtd})</small></span>`;
     });
-    html += '</div>'; // FECHAMOS A DIV DA PLANILHA AQUI!
-
-    // O container onde a tabela de livros vai abrir fica FORA da planilha, ocupando 100% do espaço
+    html += '</div>';
     html += '<div id="livrosPorAutor" style="margin-top: 30px; width: 100%;"></div>';
     
     container.innerHTML = html;
@@ -257,7 +247,6 @@ function filtrarPorAutor(autor) {
     div.innerHTML = html;
 }
 
-
 // ===== Página Instrumentos =====
 function renderizarInstrumentos() {
     const container = document.getElementById('instrumentos');
@@ -265,17 +254,12 @@ function renderizarInstrumentos() {
     livros.forEach(l => mapa.set(l.instrumento, (mapa.get(l.instrumento) || 0) + 1));
     const lista = Array.from(mapa.entries()).sort((a, b) => a[0].localeCompare(b[0]));
 
-    // Criamos o título da página
     let html = '<h1>🎸 Instrumentos</h1>';
-    
-    // CRIAMOS UMA DIV EXCLUSIVA PARA A PLANILHA DE COLUNAS
     html += '<div class="planilha-grid">';
     lista.forEach(([inst, qtd]) => {
         html += `<span class="list-item" onclick="filtrarPorInstrumento('${inst.replace(/'/g, "\\'")}')"><span>${inst}</span> <small>(${qtd})</small></span>`;
     });
-    html += '</div>'; // FECHAMOS A DIV DA PLANILHA AQUI!
-
-    // O container onde a tabela de livros vai abrir fica FORA da planilha, ocupando 100% do espaço
+    html += '</div>';
     html += '<div id="livrosPorInstrumento" style="margin-top: 30px; width: 100%;"></div>';
     
     container.innerHTML = html;
