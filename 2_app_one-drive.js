@@ -14,35 +14,42 @@ const LINK_PASTA_ONEDRIVE = "https://sescba-my.sharepoint.com/personal/ba7918_se
 // ===== Função auxiliar para calcular o nome da pasta com base no número =====
 function obterPastaFaixa(numero) {
     const num = parseInt(numero, 10);
-    if (isNaN(num)) return ''; // Se não for numérico, fica na raiz da pasta pdf
+    if (isNaN(num)) return '1-999'; // Fallback padrão
 
-    // Calcula a faixa de milhar (ex: 2450 -> inicio 2000, fim 2999)
     const inicio = Math.floor(num / 1000) * 1000;
     const fim = inicio + 999;
+
+    // Se estiver na faixa de 0 a 999, o nome da pasta no seu OneDrive é "1-999"
+    if (inicio === 0) {
+        return '1-999';
+    }
 
     return `${inicio}-${fim}`;
 }
 
-// ===== Abrir PDF direcionando para o visualizador direto no OneDrive Sesc =====
+// ===== Abrir PDF direcionando para a subpasta correta no OneDrive Sesc =====
 function abrirPDF(caminho) {
     if (caminho.startsWith('http://') || caminho.startsWith('https://')) {
         window.open(caminho, '_blank');
         return;
     }
 
-    // 1. Extrai apenas o nome do arquivo (ex: "pdf/2450.pdf" ou "2450.pdf" vira "2450.pdf")
+    // 1. Extrai apenas o nome do arquivo (ex: "pdf/2.pdf" ou "2.pdf" vira "2.pdf")
     const nomeArquivo = caminho.split('/').pop();
 
-    // 2. Descobre a subpasta correspondente (ex: "2000-2999")
+    // 2. Descobre a subpasta correspondente (ex: "1-999", "1000-1999")
     const numeroApenas = nomeArquivo.replace(/\D/g, ''); 
     const subpasta = obterPastaFaixa(numeroApenas);
 
-    // 3. Monta o caminho relativo da pasta pai
+    // 3. Caminho base da pasta no seu OneDrive institucional
     const caminhoBase = '%2Fpersonal%2Fba7918%5Fsescbahia%5Fcom%5Fbr%2FDocuments%2FNBM%2Fpdf';
-    const caminhoPastaPai = subpasta ? `${caminhoBase}%2F${encodeURIComponent(subpasta)}` : caminhoBase;
+    
+    // 4. Monta o ID exato apontando para dentro da subpasta e do arquivo
+    const caminhoPastaSub = `${caminhoBase}%2F${encodeURIComponent(subpasta)}`;
+    const idCompletoArquivo = `${caminhoPastaSub}%2F${encodeURIComponent(nomeArquivo)}`;
 
-    // 4. Monta o caminho completo do arquivo no OneDrive
-    const urlDiretaOneDrive = `https://sescba-my.sharepoint.com/personal/ba7918_sescbahia_com_br/_layouts/15/onedrive.aspx?id=${caminhoPastaPai}%2F${encodeURIComponent(nomeArquivo)}&parent=${caminhoPastaPai}&ga=1`;
+    // 5. URL estruturada do OneDrive corporativo para forçar a abertura correta
+    const urlDiretaOneDrive = `https://sescba-my.sharepoint.com/personal/ba7918_sescbahia_com_br/_layouts/15/onedrive.aspx?id=${idCompletoArquivo}&parent=${caminhoPastaSub}&ga=1`;
 
     window.open(urlDiretaOneDrive, '_blank');
 }
