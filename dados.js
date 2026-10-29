@@ -1061,6 +1061,7 @@ const dadosLivros = [
   {"numero":"1059","tipo":"PDF","instrumento":"MUSICOTERAPIA","autor":"JORNAL 10","titulo":"SAÚDE E HARMONIA - abril de 2008","arquivo":"pdf/1059.pdf"},
   {"numero":"1060","tipo":"PDF","instrumento":"MUSICOTERAPIA","autor":"JORNAL 11","titulo":"SAÚDE E HARMONIA - junho de 2008","arquivo":"pdf/1060.pdf"},
   {"numero":"1061","tipo":"PDF","instrumento":"MUSICOTERAPIA","autor":"JORNAL 12","titulo":"SAÚDE E HARMONIA - agosto de 2008","arquivo":"pdf/1061.pdf"},
+  {"numero":"1062","tipo":"PDF","instrumento":"PIANO","autor":"DENES AGAY","titulo":"The Joy of Boogie and Blues","arquivo":"pdf/1062.pdf"},
   {"numero":"1063","tipo":"PDF","instrumento":"MUSICOTERAPIA","autor":"Graziela França Alves PANACIONI","titulo":"MUSICOTERAPIA NA PROMOÇÃO DA SAÚDE E CONTROLE DO ESTRESSE UM PROJETO EM ANDAMENTO","arquivo":"pdf/1063.pdf"},
   {"numero":"1064","tipo":"PDF","instrumento":"MUSICOTERAPIA","autor":"Revista Brasileira de Musicoterapia","titulo":"União Brasileira das Associações Musicoterapia. - v. 1, n. 1, (1996).","arquivo":"pdf/1064.pdf"},
   {"numero":"1065","tipo":"PDF","instrumento":"MUSICOTERAPIA","autor":"Revista Brasileira de Musicoterapia","titulo":"União Brasileira das Associações Musicoterapia. - v. 1, n. 1, (1996).","arquivo":"pdf/1065.pdf"},
