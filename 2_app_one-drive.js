@@ -1,4 +1,4 @@
-a// app.js - Versão Otimizada com Busca Direta no OneDrive (Sesc Bahia)
+// app.js - Versão Otimizada com Busca Direta no OneDrive (Sesc Bahia)
 
 let livros = [];
 let resultadosFiltrados = [];
@@ -78,6 +78,7 @@ function mostrarPagina(pagina) {
     else if (pagina === 'autores') renderizarAutores();
     else if (pagina === 'instrumentos') renderizarInstrumentos();
     else if (pagina === 'estatisticas') renderizarEstatisticas();
+    else if (pagina === 'auditoria') renderizarAuditoria(); // <--- Adicionado aqui!
     else if (pagina === 'inicio') renderizarInicio();
 }
 
