@@ -1,5 +1,5 @@
 // dados.js - Todos os livros em um array
-const dadosLivros = [
+const dadosLivros1 = [
   {"numero":"2","tipo":"PDF","instrumento":"DISSERTAÇÃO","autor":"KEYLA ROSA DE OLIVEIRA","titulo":"PANORAMA DA EDUCAÇÃO MUSICAL PRÁTICAS METODOLÓGICAS EM DUAS ESCOLAS DE MÚSICA DE GOIÂNIA GO","arquivo":"pdf/002.pdf"},
   {"numero":"3","tipo":"PDF","instrumento":"ARTIGO","autor":"HELENA CARRERAS CABEZAS","titulo":"CONSIDERAÇÕES SOBRE OS HORIZONTES PEDAGÓGICOS EM JÁTÉKOK, DE GYÖRGY KURTÁG","arquivo":"pdf/003.pdf"},
   {"numero":"4","tipo":"PDF","instrumento":"ARTIGO","autor":"MIGUEL SÁ","titulo":"ARRANJADOR UM PARCEIRO DA CANÇÃO","arquivo":"pdf/004.pdf"},
