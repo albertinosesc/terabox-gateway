@@ -1,4 +1,4 @@
-// app.js - Versão Otimizada com Busca Direta no OneDrive (Sesc Bahia)
+a// app.js - Versão Otimizada com Busca Direta no OneDrive (Sesc Bahia)
 
 let livros = [];
 let resultadosFiltrados = [];
@@ -337,3 +337,90 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     carregarDados();
 });
+
+
+// ============================================================
+// PÁGINA DE AUDITORIA DE FALTANTES POR FAIXA
+// ============================================================
+
+function renderizarAuditoria() {
+    const container = document.getElementById('auditoria');
+    
+    // Define as faixas de milhar que você utiliza
+    const faixas = [
+        { nome: "0001 - 0999 (Pasta 1-999)", inicio: 1, fim: 999 },
+        { nome: "1000 - 1999", inicio: 1000, fim: 1999 },
+        { nome: "2000 - 2999", inicio: 2000, fim: 2999 },
+        { nome: "3000 - 3999", inicio: 3000, fim: 3999 },
+        { nome: "4000 - 4999", inicio: 4000, fim: 4999 },
+        { nome: "5000 - 5999", inicio: 5000, fim: 5999 },
+        { nome: "6000 - 6999", inicio: 6000, fim: 6999 },
+        { nome: "7000 - 7999", inicio: 7000, fim: 7999 },
+        { nome: "8000 - 8999", inicio: 8000, fim: 8999 },
+        { nome: "9000 - 9999", inicio: 9000, fim: 9999 }
+    ];
+
+    let html = `
+        <h1>🔍 Auditoria de Arquivos Faltantes</h1>
+        <p style="color:#666; margin-bottom:20px;">Clique em uma faixa para verificar quais números do intervalo ainda não foram cadastrados.</p>
+        <div class="card-grid">
+    `;
+
+    faixas.forEach((f, index) => {
+        // Conta quantos livros cadastrados existem nessa faixa
+        const cadastradosNaFaixa = livros.filter(l => {
+            const num = parseInt(l.numero, 10);
+            return num >= f.inicio && num <= f.fim;
+        }).length;
+
+        const totalEsperado = (f.fim - f.inicio) + 1;
+        const faltantes = totalEsperado - cadastradosNaFaixa;
+
+        html += `
+            <div class="card" style="cursor:pointer;" onclick="verificarFaltantes(${f.inicio}, ${f.fim}, '${f.nome}')">
+                <h3>📁 ${f.nome}</h3>
+                <p>Cadastrados: <strong>${cadastradosNaFaixa}</strong> / ${totalEsperado}</p>
+                <p style="color: ${faltantes > 0 ? '#d9534f' : '#5cb85c'}; font-weight:bold; margin-top:5px;">
+                    Faltando: ${faltantes} números
+                </p>
+            </div>
+        `;
+    });
+
+    html += `</div><div id="resultadoAuditoria" style="margin-top: 30px; width: 100%;"></div>`;
+    container.innerHTML = html;
+}
+
+function verificarFaltantes(inicio, fim, nomeFaixa) {
+    const divResultado = document.getElementById('resultadoAuditoria');
+    if (!divResultado) return;
+
+    // 1. Cria um conjunto (Set) com todos os números já cadastrados
+    const numerosCadastrados = new Set(livros.map(l => parseInt(l.numero, 10)));
+
+    // 2. Varre o intervalo e descobre quais estão faltando
+    let ausentes = [];
+    for (let i = inicio; i <= fim; i++) {
+        if (!numerosCadastrados.has(i)) {
+            ausentes.push(i);
+        }
+    }
+
+    if (ausentes.length === 0) {
+        divResultado.innerHTML = `<h3>Faixa: ${nomeFaixa}</h3><p style="color:green; font-weight:bold; padding:15px;">Parabéns! Nenhum número está faltando nesta faixa.</p>`;
+        return;
+    }
+
+    // Formata os números faltantes com zeros à esquerda (ex: 002, 015)
+    let listaHtml = ausentes.map(n => `<span style="background:#f0f0f0; padding:5px 10px; margin:3px; display:inline-block; border-radius:4px; font-family:monospace;">${String(n).padStart(3, '0')}</span>`).join(' ');
+
+    divResultado.innerHTML = `
+        <div style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+            <h3>📊 Relatório de Faltantes - Faixa: ${nomeFaixa}</h3>
+            <p style="margin: 10px 0;">Total de números ausentes: <strong>${ausentes.length}</strong></p>
+            <div style="max-height: 250px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; background:#fafafa;">
+                ${listaHtml}
+            </div>
+        </div>
+    `;
+}
