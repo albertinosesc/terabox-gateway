@@ -50,14 +50,19 @@ function abrirPDF(caminho) {
     window.open(urlDiretaOneDrive, '_blank');
 }
 
-// ===== Carregar dados (a partir da variável global dados.js) =====
 function carregarDados() {
-    if (typeof dadosLivros !== 'undefined') {
-        livros = dadosLivros;
-    } else {
-        console.warn('dadosLivros não encontrado. Usando array vazio.');
-        livros = [];
+    // Une as 4 partes em uma única lista de livros
+    livros = [
+        ...(typeof dadosLivros1 !== 'undefined' ? dadosLivros1 : []),
+        ...(typeof dadosLivros2 !== 'undefined' ? dadosLivros2 : []),
+        ...(typeof dadosLivros3 !== 'undefined' ? dadosLivros3 : []),
+        ...(typeof dadosLivros4 !== 'undefined' ? dadosLivros4 : [])
+    ];
+
+    if (livros.length === 0) {
+        console.warn('Nenhum dado encontrado nos arquivos.');
     }
+
     resultadosFiltrados = [...livros];
     ordenarPor('numero');
     mostrarPagina('inicio');
