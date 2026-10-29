@@ -1,5 +1,3 @@
-// app.js - Versão Otimizada com Busca Direta no OneDrive (Sesc Bahia)
-
 let livros = [];
 let resultadosFiltrados = [];
 let ordenacao = { campo: 'numero', direcao: 'asc' };
