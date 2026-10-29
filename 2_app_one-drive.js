@@ -1,7 +1,8 @@
 function renderizarAuditoria() {
     const container = document.getElementById('auditoria');
     
-    // Define as faixas de 500 em 500 conforme a sua nova organização no OneDrive
+    
+        // Define as faixas de 500 em 500 até 10.000
     const faixas = [
         { nome: "Pasta 1 - 500", inicio: 1, fim: 500 },
         { nome: "Pasta 501 - 1000", inicio: 501, fim: 1000 },
@@ -12,8 +13,17 @@ function renderizarAuditoria() {
         { nome: "Pasta 3001 - 3500", inicio: 3001, fim: 3500 },
         { nome: "Pasta 3501 - 4000", inicio: 3501, fim: 4000 },
         { nome: "Pasta 4001 - 4500", inicio: 4001, fim: 4500 },
-        { nome: "Pasta 4501 - 5000", inicio: 4501, fim: 5000 }
-        // Se passar de 5000, basta continuar adicionando as próximas faixas aqui (+500)
+        { nome: "Pasta 4501 - 5000", inicio: 4501, fim: 5000 },
+        { nome: "Pasta 5001 - 5500", inicio: 5001, fim: 5500 },
+        { nome: "Pasta 5501 - 6000", inicio: 5501, fim: 6000 },
+        { nome: "Pasta 6001 - 6500", inicio: 6001, fim: 6500 },
+        { nome: "Pasta 6501 - 7000", inicio: 6501, fim: 7000 },
+        { nome: "Pasta 7001 - 7500", inicio: 7001, fim: 7500 },
+        { nome: "Pasta 7501 - 8000", inicio: 7501, fim: 8000 },
+        { nome: "Pasta 8001 - 8500", inicio: 8001, fim: 8500 },
+        { nome: "Pasta 8501 - 9000", inicio: 8501, fim: 9000 },
+        { nome: "Pasta 9001 - 9500", inicio: 9001, fim: 9500 },
+        { nome: "Pasta 9501 - 10000", inicio: 9501, fim: 10000 }
     ];
 
     let html = `
