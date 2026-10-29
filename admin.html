@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Gerador e Auditor</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-container { padding: 30px; max-width: 1000px; margin: 0 auto; }
+        .box-acao { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .box-acao h2 { margin-bottom: 15px; color: #333; }
+        .btn-acao { background: #0078d4; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .btn-acao:hover { background: #005a9e; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; max-height: 200px; overflow-y: auto; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>🎵 Admin</h2>
+        <a href="index.html">🏠 Voltar ao Site</a>
+        <a href="#" class="active">⚙️ Gerador & Auditor</a>
+    </div>
+
+    <div class="main">
+        <div class="admin-container">
+            <h1>⚙️ Painel de Gestão e Geração de Dados</h1>
+            <p style="color:#666; margin-bottom: 20px;">Selecione a pasta local com seus PDFs (ou uma faixa como 1-999) para gerar o <code>dados.js</code> automaticamente e auditar faltantes.</p>
+
+            <div class="box-acao">
+                <h2>📁 1. Selecionar Pasta de PDFs do Computador</h2>
+                <input type="file" id="pastaInput" webkitdirectory multiple class="btn-acao" style="background:#f4f4f4; color:#333; border: 1px solid #ccc; width:100%; padding:15px;" onchange="processarPasta(event)">
+                <p id="statusLeitura" style="margin-top: 10px; font-weight: bold; color: #0078d4;"></p>
+            </div>
+
+            <div class="box-acao" id="secaoResultado" style="display:none;">
+                <h2>📊 2. Resultado da Varredura</h2>
+                <p id="infoResumo"></p>
+                
+                <div style="margin-top: 15px;">
+                    <button class="btn-acao" onclick="baixarDadosJS()" style="background: #28a745;">💾 Baixar Novo arquivo 'dados.js'</button>
+                </div>
+
+                <h3 style="margin-top: 20px;">Prévia do código gerado:</h3>
+                <pre id="codigoGerado"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let novosDados = [];
+
+        function processarPasta(event) {
+            const arquivos = event.target.files;
+            novosDados = [];
+            let contador = 0;
+
+            for (let i = 0; i < arquivos.length; i++) {
+                let file = arquivos[i];
+                // Filtra apenas arquivos PDF
+                if (file.name.toLowerCase().endsWith('.pdf')) {
+                    contador++;
+                    
+                    // Extrai o número do arquivo (ex: "002.pdf" vira "2" ou "002")
+                    let nomeLimpo = file.name.replace('.pdf', '');
+                    let numeroApenas = parseInt(nomeLimpo.replace(/\D/g, ''), 10);
+                    
+                    if (isNaN(numeroApenas)) numeroApenas = contador;
+
+                    // Monta o objeto padrão do livro
+                    novosDados.push({
+                        numero: String(numeroApenas),
+                        tipo: "PDF",
+                        instrumento: "GERAL",
+                        autor: "A DEFINIR",
+                        titulo: nomeLimpo.toUpperCase(),
+                        arquivo: `pdf/${file.name}`
+                    });
+                }
+            }
+
+            // Ordena por número
+            novosDados.sort((a, b) => parseInt(a.numero) - parseInt(b.numero));
+
+            if (novosDados.length > 0) {
+                document.getElementById('statusLeitura').innerText = `Sucesso! ${novosDados.length} arquivos PDF encontrados na pasta.`;
+                document.getElementById('secaoResultado').style.display = 'block';
+                document.getElementById('infoResumo').innerText = `Foram identificados ${novosDados.length} arquivos válidos prontos para o catálogo.`;
+                
+                // Gera a prévia do código
+                let codigoTexto = "const dadosLivros = " + JSON.stringify(novosDados, null, 2) + ";";
+                document.getElementById('codigoGerado').innerText = codigoTexto;
+            } else {
+                alert('Nenhum arquivo PDF encontrado na pasta selecionada.');
+            }
+        }
+
+        function baixarDadosJS() {
+            if (novosDados.length === 0) return;
+
+            let conteudo = "const dadosLivros = " + JSON.stringify(novosDados, null, 2) + ";";
+            let blob = new Blob([conteudo], { type: 'text/javascript;charset=utf-8' });
+            let link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'dados.js';
+            link.click();
+            URL.revokeObjectURL(link.href);
+            alert('Arquivo dados.js baixado com sucesso! Substitua o arquivo antigo na pasta do seu projeto.');
+        }
+    </script>
+</body>
+</html>
