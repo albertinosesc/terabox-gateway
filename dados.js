@@ -1533,6 +1533,7 @@ const dadosLivros = [
   {"numero":"1531","tipo":"PDF","instrumento":"PIANO","autor":"Hans-Gunter Heumann","titulo":"50's Hits","arquivo":"pdf/1531.pdf"},
   {"numero":"1532","tipo":"PDF","instrumento":"PIANO","autor":"Hans-Gunter Heumann","titulo":"60's Hits","arquivo":"pdf/1532.pdf"},
   {"numero":"1533","tipo":"PDF","instrumento":"PIANO","autor":"Hans-Gunter Heumann","titulo":"70's Hits","arquivo":"pdf/1533.pdf"},
+  {"numero":"1534","tipo":"PDF","instrumento":"PIANO","autor":"Hans-Gunter Heumann","titulo":"Die Klavierbibel","arquivo":"pdf/1534.pdf"},
   {"numero":"1535","tipo":"PDF","instrumento":"PIANO","autor":"Hans-Gunter Heumann","titulo":"Hits For Kids","arquivo":"pdf/1535.pdf"},
   {"numero":"1536","tipo":"PDF","instrumento":"PIANO","autor":"Hans-Gunter Heumann","titulo":"Klavier Kultbuch","arquivo":"pdf/1536.pdf"},
   {"numero":"1537","tipo":"PDF","instrumento":"PIANO","autor":"Hans-Gunter Heumann","titulo":"Late Night Piano","arquivo":"pdf/1537.pdf"},
