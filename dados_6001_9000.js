@@ -764,6 +764,21 @@ const dadosLivros3 = [
   {"numero":"8298","tipo":"PDF","instrumento":"PIANO","autor":"Conrad Kuhner","titulo":"School of Etudes for the Pianist","arquivo":"pdf/8298.pdf"},
   {"numero":"8299","tipo":"PDF","instrumento":"PIANO","autor":"Gail Lew","titulo":"Technic Is Fun - Early Elementary","arquivo":"pdf/8299.pdf"},
   {"numero":"8300","tipo":"PDF","instrumento":"PIANO","autor":"Dennis Alexander","titulo":"Christmas Just for you","arquivo":"pdf/8300.pdf"},
-  {"numero":"8301","tipo":"PDF","instrumento":"PIANO","autor":"Sharon Pease","titulo":"Boogie Woogie Piano styles n°1","arquivo":"pdf/8301.pdf"}
+  {"numero":"8301","tipo":"PDF","instrumento":"PIANO","autor":"Sharon Pease","titulo":"Boogie Woogie Piano styles n°1","arquivo":"pdf/8301.pdf"},
+  {"numero":"8304","tipo":"PDF","instrumento":"PIANO","autor":"Colin Davey","titulo":"Learn Boogie Woogie","arquivo":"pdf/8304.pdf"},
+  {"numero":"8305","tipo":"PDF","instrumento":"PIANO","autor":"Noel","titulo":"Love Collection For Piano Vol1","arquivo":"pdf/8305.pdf"},
+  {"numero":"8306","tipo":"PDF","instrumento":"SAXOFONE","autor":"Joseph Viola","titulo":"Technique of The Saxophone","arquivo":"pdf/8306.pdf"},
+  {"numero":"8307","tipo":"PDF","instrumento":"PIANO","autor":"WunderKeys","titulo":"Piano For Preschoolers","arquivo":"pdf/8307.pdf"},
+  {"numero":"8308","tipo":"PDF","instrumento":"PIANO","autor":"Thomas Tapper","titulo":"Graded Piano Course","arquivo":"pdf/8308.pdf"},
+  {"numero":"8309","tipo":"PDF","instrumento":"PIANO","autor":"Thomas Tapper","titulo":"Musical Form and Analysis","arquivo":"pdf/8309.pdf"},
+  {"numero":"8310","tipo":"PDF","instrumento":"PIANO","autor":"Thomas Tapper","titulo":"Progressive Piano Studies Op.66","arquivo":"pdf/8310.pdf"},
+  {"numero":"8028","tipo":"PDF","instrumento":"EDUCAÇÃO MUSICAL","autor":"SESC","titulo":"Plano de Curso Educação Infantil 2026","arquivo":"pdf/8028.pdf"},
+  {"numero":"8029","tipo":"PDF","instrumento":"PIANO","autor":"WunderKeys","titulo":"Piano For Preschoolers","arquivo":"pdf/8029.pdf"},
+  {"numero":"8030","tipo":"PDF","instrumento":"PIANO","autor":"Frank Booth","titulo":"How to Play Boogie Woogie","arquivo":"pdf/8030.pdf"},
+  {"numero":"8031","tipo":"PDF","instrumento":"PIANO","autor":"John Brimhall","titulo":"Easy Popupar Piano Duets","arquivo":"pdf/8031.pdf"},
+  {"numero":"8032","tipo":"PDF","instrumento":"SAXOFONE","autor":"John O' Reilly Mark Williams","titulo":"Accent on Achievement Eb","arquivo":"pdf/8032.pdf"},
+  {"numero":"8033","tipo":"PDF","instrumento":"WOODWIND","autor":"ABRSM","titulo":"Practical Music Grades","arquivo":"pdf/8033.pdf"},
+  {"numero":"8034","tipo":"PDF","instrumento":"SAXOFONE","autor":"Joseph Viola","titulo":"Technique of The Saxophone","arquivo":"pdf/8034.pdf"},
+  {"numero":"8035","tipo":"PDF","instrumento":"PIANO","autor":"Bill Woodward","titulo":"It's Easy to Play Latin","arquivo":"pdf/8035.pdf"},
 
  ];
