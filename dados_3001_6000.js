@@ -1087,7 +1087,7 @@ const dadosLivros2 = [
   {"numero":"4087","tipo":"PDF","instrumento":"VIOLÃO","autor":"Método Russo","titulo":"Leitor para um jovem guitarrista","arquivo":"pdf/4087.pdf"},
   {"numero":"4088","tipo":"PDF","instrumento":"TEORIA MUSICAL","autor":"Charles S. Peters","titulo":"Master Theory","arquivo":"pdf/4088.pdf"},
   {"numero":"4089","tipo":"PDF","instrumento":"TEORIA MUSICAL","autor":"Charles S. Peters","titulo":"Master Theory","arquivo":"pdf/4089.pdf"},
-  {"numero":"4090","tipo":"PDF","instrumento":"PIANO","autor":"Köhler, Louis","titulo":"Practical Method for the Pianoforte, Op.249 Vol 1","arquivo":"pdf/4090.pdf"},
+  {"numero":"4090","tipo":"PDF","instrumento":"PIANO","autor":"LOUIS KOHLER","titulo":"Practical_Method,_Op.249_book3","arquivo":"pdf/4090.pdf"},
   {"numero":"4091","tipo":"PDF","instrumento":"PIANO","autor":"Köhler, Louis","titulo":"Practical Method for the Pianoforte, Op.249 Vol 2","arquivo":"pdf/4091.pdf"},
   {"numero":"4092","tipo":"PDF","instrumento":"FLAUTA TRANSVERSAL","autor":"Alberto Sampaio Neto","titulo":"A INICIAÇÃO INFANTIL À FLAUTA TRANSVERSAL A PARTIR DO PÍFARO","arquivo":"pdf/4092.pdf"},
   {"numero":"4093","tipo":"PDF","instrumento":"EDUCAÇÃO MUSICAL","autor":"ADELINE ANNELYSE MARIE STERVINOU","titulo":"ANAIS DA PRIMEIRA CONFERENCIA INTERNACIONAL EM EDUCAÇAO MUSICAL DE SOBRAL","arquivo":"pdf/4093.pdf"},
